@@ -185,14 +185,18 @@ export class LightningSystem {
 
       const { orbMesh, coreMesh, ringMesh } = group.userData;
       if (isUnlocked) {
-        // Bright, active, electric cyan/white glowing unlocked visual state
-        orbMesh.material.color.setHex(CONFIG.colors.electricBlue);
+        // Nodes 0 & 1 use Electric Cyan, Nodes 2 & 3 (Nuclei 3 & 4) use Electric Purple (0xb545ff)
+        const isPurpleNode = idx >= 2;
+        const mainColor = isPurpleNode ? 0xb545ff : CONFIG.colors.electricBlue;
+        const ringColor = isPurpleNode ? 0xb545ff : CONFIG.colors.electricCyan;
+
+        orbMesh.material.color.setHex(mainColor);
         orbMesh.material.opacity = 0.75;
 
         coreMesh.material.color.setHex(CONFIG.colors.coreWhite);
         coreMesh.material.opacity = 0.95;
 
-        ringMesh.material.color.setHex(CONFIG.colors.electricCyan);
+        ringMesh.material.color.setHex(ringColor);
         ringMesh.material.opacity = 0.65;
 
         if (group.userData.targetScale < 1.0) group.userData.targetScale = 1.0;
@@ -252,10 +256,11 @@ export class LightningSystem {
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
     const material = new THREE.PointsMaterial({
-      size: 0.06,
+      size: 0.12,
+      sizeAttenuation: true,
       vertexColors: true,
       transparent: true,
-      opacity: 0.85,
+      opacity: 0.9,
       blending: THREE.AdditiveBlending,
     });
 

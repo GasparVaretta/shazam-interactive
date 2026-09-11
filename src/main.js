@@ -10,6 +10,10 @@ import { CameraSystem } from './camera/camera.js';
 import { LightningSystem } from './scene/lightning.js';
 import { InteractionManager } from './interaction/interaction.js';
 import { WorldSpaceAnchorManager } from './anchors/anchors.js';
+import { Nucleo1UI } from './ui/nucleo1.js';
+import { Nucleo2UI } from './ui/nucleo2.js';
+import { Nucleo3UI } from './ui/nucleo3.js';
+import { AudioManager } from './audio/audio.js';
 
 class ShazamApp {
   constructor() {
@@ -19,9 +23,15 @@ class ShazamApp {
     this.lightningSystem = null;
     this.interactionManager = null;
     this.anchorManager = null;
+    this.audioManager = new AudioManager();
 
     this.clock = new THREE.Clock();
     this.isInitialized = false;
+
+    // HUD Infographic Controllers
+    this.nucleo1UI = null;
+    this.nucleo2UI = null;
+    this.nucleo3UI = null;
 
     // Progression & State Management
     this.maxUnlockedIndex = 0;
@@ -73,10 +83,13 @@ class ShazamApp {
       this.lightningSystem.getNodeOrbGroups()
     );
 
-    // 6. Apply initial progressive unlock state
+    // 6. Initialize HUD Controllers for Nucleus 1, 2, and 3
+    this.initHUDControllers();
+
+    // 7. Apply initial progressive unlock state
     this.syncUnlockedState();
 
-    // 7. Bind Start Screen, Conclusion CTA & UI Events
+    // 8. Bind Start Screen, Conclusion CTA & UI Events
     this.setupStartScreen();
     this.setupConclusionUI();
     this.setupInteractions();
@@ -84,20 +97,90 @@ class ShazamApp {
     window.addEventListener('resize', this.onResize.bind(this));
 
     this.isInitialized = true;
-    console.log('⚡ Shazam 3D Stage Initialized with Start Screen & Conclusion Flow');
+    console.log('⚡ Shazam 3D Stage Initialized with Nucleus 1, 2, & 3 HUD Flow');
 
-    // 8. Start Render Loop
+    // Force instant frame 0 update & render tick for 3D stars/particles
+    if (this.lightningSystem) this.lightningSystem.update(0, 0);
+    if (this.appScene) {
+      this.appScene.update(0);
+      if (this.cameraSystem) {
+        this.appScene.render(this.cameraSystem.getCamera());
+      }
+    }
+
+    // 9. Start Render Loop
     this.animate();
   }
 
   /**
-   * Start Screen Overlay Handling (Pantalla 1 -> Pantalla 2 Transition)
+   * Initializes HTML/CSS HUD Infographic Controllers for Node 1, Node 2, and Node 3
+   */
+  async initHUDControllers() {
+    // Nucleus 1 UI (Orígenes: Screen 1 -> Screen 2 -> Transition to Nucleus 2)
+    this.nucleo1UI = new Nucleo1UI(() => {
+      console.log('⚡ Nucleus 1 Screen 2 complete -> Navigating to Nucleus 2');
+      this.handleNodeSelection(1);
+    });
+    const node1ContentEl = document.getElementById('node-content-0');
+    if (node1ContentEl) {
+      await this.nucleo1UI.render(node1ContentEl);
+    }
+
+    // Nucleus 2 UI (¿Cómo funcionaba?)
+    this.nucleo2UI = new Nucleo2UI(() => {
+      console.log('⚡ Nucleus 2 complete -> Navigating to Nucleus 3 (if unlocked)');
+      if (this.maxUnlockedIndex >= 2) {
+        this.handleNodeSelection(2);
+      } else {
+        this.cameraSystem.transitionToOverview();
+        this.resetActiveSelection();
+      }
+    });
+    const node2ContentEl = document.getElementById('node-content-1');
+    if (node2ContentEl) {
+      await this.nucleo2UI.render(node2ContentEl);
+    }
+
+    // Nucleus 3 UI (Evolución / Actualidad)
+    this.nucleo3UI = new Nucleo3UI(() => {
+      console.log('⚡ Nucleus 3 complete -> Navigating to Nucleus 4 (if unlocked)');
+      if (this.maxUnlockedIndex >= 3) {
+        this.handleNodeSelection(3);
+      } else {
+        this.cameraSystem.transitionToOverview();
+        this.resetActiveSelection();
+      }
+    });
+    const node3ContentEl = document.getElementById('node-content-2');
+    if (node3ContentEl) {
+      await this.nucleo3UI.render(node3ContentEl);
+    }
+  }
+
+  /**
+   * Start Screen Overlay Handling
    */
   setupStartScreen() {
+    this.overviewUI = document.getElementById('overviewUI');
+
+    // Attach listeners to trigger background audio loop on user interaction
+    const triggerAudio = () => {
+      if (this.audioManager) {
+        this.audioManager.startBackgroundMusic();
+      }
+    };
+
+    window.addEventListener('click', triggerAudio, { once: true });
+    window.addEventListener('pointerdown', triggerAudio, { once: true });
+
     if (this.startCTA && this.startScreen) {
       this.startCTA.addEventListener('click', () => {
         console.log('⚡ Starting 3D Infographic Stage');
+        triggerAudio();
         this.startScreen.classList.add('hidden');
+        if (this.overviewUI) {
+          this.overviewUI.classList.remove('hidden');
+        }
         this.cameraSystem.transitionToOverview();
       });
     }
@@ -133,6 +216,10 @@ class ShazamApp {
     this.syncUnlockedState();
     if (this.anchorManager) {
       this.anchorManager.setActiveNode(-1);
+      this.anchorManager.setHoveredNode(-1);
+    }
+    if (this.overviewUI) {
+      this.overviewUI.classList.remove('hidden');
     }
   }
 
@@ -171,40 +258,94 @@ class ShazamApp {
     if (this.interactionManager) {
       this.interactionManager.setMaxUnlockedIndex(this.maxUnlockedIndex);
     }
+
+    // Apply Purple styling to overview buttons for Node 3 and Node 4 when unlocked
+    const btn2 = document.getElementById('overviewNode2Btn');
+    if (btn2 && this.maxUnlockedIndex >= 2) {
+      btn2.classList.add('purple-node-btn');
+    }
+    const btn3 = document.getElementById('overviewNode3Btn');
+    if (btn3 && this.maxUnlockedIndex >= 3) {
+      btn3.classList.add('purple-node-btn');
+    }
+  }
+
+  handleNodeSelection(nodeIndex) {
+    if (nodeIndex <= this.maxUnlockedIndex) {
+      console.log(`Navigating to 3D Node [${nodeIndex + 1}]`);
+      this.activeNodeIndex = nodeIndex;
+      this.visitedNodes.add(nodeIndex);
+
+      // Play Node transition sound effect
+      if (this.audioManager) {
+        this.audioManager.playNodeSfx();
+      }
+
+      // Hide OVERVIEW UI and general overview title during node entry
+      if (this.overviewUI) {
+        this.overviewUI.classList.add('hidden');
+      }
+      if (this.anchorManager) {
+        this.anchorManager.setHoveredNode(-1);
+      }
+
+      this.cameraSystem.transitionToNode(nodeIndex);
+      this.anchorManager.setActiveNode(nodeIndex);
+
+      // Reset Nucleus 1 state to Screen 1 whenever Node 0 is entered
+      if (nodeIndex === 0 && this.nucleo1UI) {
+        this.nucleo1UI.resetState();
+      }
+
+      // Reset Nucleus 2 state to Neutral State A whenever Node 1 is entered
+      if (nodeIndex === 1 && this.nucleo2UI) {
+        this.nucleo2UI.resetState();
+      }
+
+      // Reset Nucleus 3 state to Screen 1 whenever Node 2 is entered
+      if (nodeIndex === 2 && this.nucleo3UI) {
+        this.nucleo3UI.resetState();
+      }
+
+      // Unlock next node sequentially (1 -> 2 -> 3 -> 4)
+      if (nodeIndex === this.maxUnlockedIndex && this.maxUnlockedIndex < 3) {
+        this.maxUnlockedIndex += 1;
+        console.log(`⚡ Unlocked Next Node [${this.maxUnlockedIndex + 1}]`);
+        this.syncUnlockedState();
+      }
+
+      // Check if return navigation triggers conclusion unlock
+      this.checkConclusionUnlockCondition();
+    }
   }
 
   setupInteractions() {
-    const handleNodeSelection = (nodeIndex) => {
-      if (nodeIndex <= this.maxUnlockedIndex) {
-        console.log(`Navigating to 3D Node [${nodeIndex + 1}]`);
-        this.activeNodeIndex = nodeIndex;
-        this.visitedNodes.add(nodeIndex);
-        this.cameraSystem.transitionToNode(nodeIndex);
-        this.anchorManager.setActiveNode(nodeIndex);
-
-        // Unlock next node sequentially (1 -> 2 -> 3 -> 4)
-        if (nodeIndex === this.maxUnlockedIndex && this.maxUnlockedIndex < 3) {
-          this.maxUnlockedIndex += 1;
-          console.log(`⚡ Unlocked Next Node [${this.maxUnlockedIndex + 1}]`);
-          this.syncUnlockedState();
-        }
-
-        // Check if return navigation triggers conclusion unlock
-        this.checkConclusionUnlockCondition();
-      }
-    };
+    const onSelect = (idx) => this.handleNodeSelection(idx);
 
     // 3D Mesh Raycast Click Handler
-    this.interactionManager.onNodeSelect(handleNodeSelection);
+    this.interactionManager.onNodeSelect(onSelect);
 
     // 2D HTML Anchor DOM Click Handler
     if (this.anchorManager) {
-      this.anchorManager.onAnchorClick(handleNodeSelection);
+      this.anchorManager.onAnchorClick(onSelect);
     }
 
-    // Node Hover Handler: 3D Orb feedback handled by InteractionManager without altering active node content
-    this.interactionManager.onNodeHover(() => {
-      // Hover only affects 3D orb scale, active selected node content remains unchanged
+    // OVERVIEW Node HTML Buttons (0, 1, 2, 3)
+    [0, 1, 2, 3].forEach((idx) => {
+      const btn = document.getElementById(`overviewNode${idx}Btn`);
+      if (btn) {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          onSelect(idx);
+        });
+      }
+    });
+
+    // Node Hover Handler: Passes hover state to anchorManager for OVERVIEW nuclei title display
+    this.interactionManager.onNodeHover((hoverIndex) => {
+      if (this.anchorManager) {
+        this.anchorManager.setHoveredNode(hoverIndex);
+      }
     });
 
     // Click Background Handler -> Return to Overview Camera, Hide Active Node Content & Preserve Unlocked Progression

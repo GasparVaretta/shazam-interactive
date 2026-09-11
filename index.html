@@ -17,7 +17,7 @@
     </script>
 
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Grotesk:wght@500;700&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@500;700&display=swap');
 
       * {
         margin: 0;
@@ -54,9 +54,11 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        background: radial-gradient(circle at center, rgba(3, 3, 8, 0.4) 0%, rgba(3, 3, 8, 0.92) 100%);
-        backdrop-filter: blur(4px);
+        background: radial-gradient(circle at center, rgba(3, 8, 18, 0.35) 0%, rgba(2, 5, 11, 0.75) 100%);
+        backdrop-filter: blur(2px);
+        font-family: 'Roboto Mono', monospace;
         transition: opacity 0.8s ease, visibility 0.8s ease;
+        overflow: hidden;
       }
 
       #startScreen.hidden {
@@ -66,35 +68,97 @@
       }
 
       .start-content {
+        position: relative;
+        z-index: 2;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 24px;
+        text-align: center;
+        max-width: 780px;
+        padding: 0 24px;
+      }
+
+      .start-title {
+        font-family: 'Roboto Mono', monospace;
+        font-size: 2.25rem;
+        font-weight: 700;
+        color: #ffffff;
+        letter-spacing: -0.01em;
+        margin-bottom: 12px;
+      }
+
+      .start-subtitle {
+        font-family: 'Roboto Mono', monospace;
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #00f0ff;
+        letter-spacing: 0.02em;
+        margin-bottom: 24px;
+      }
+
+      .start-subtitle .accent-purple {
+        color: #b545ff;
+      }
+
+      .start-divider {
+        width: 100%;
+        max-width: 620px;
+        height: 1.5px;
+        background-color: #00f0ff;
+        box-shadow: 0 0 10px rgba(0, 240, 255, 0.7), 0 0 4px #00f0ff;
+        margin-bottom: 32px;
+      }
+
+      .start-description {
+        font-family: 'Roboto Mono', monospace;
+        font-size: 0.95rem;
+        font-weight: 500;
+        line-height: 1.7;
+        color: #00e5ff;
+        max-width: 640px;
+        margin-bottom: 44px;
         text-align: center;
       }
 
       .start-cta-btn {
-        background: rgba(10, 20, 36, 0.85);
-        border: 1px solid rgba(0, 229, 255, 0.5);
-        color: #00e5ff;
-        padding: 14px 42px;
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: 1.1rem;
-        font-weight: 700;
-        letter-spacing: 0.25em;
-        text-transform: uppercase;
-        border-radius: 30px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(8, 14, 26, 0.92);
+        border: 2px solid #00f0ff;
+        border-radius: 40px;
+        padding: 5px 6px 5px 36px;
         cursor: pointer;
-        box-shadow: 0 0 20px rgba(0, 229, 255, 0.25);
+        box-shadow: 0 0 20px rgba(0, 240, 255, 0.4), inset 0 0 12px rgba(0, 240, 255, 0.15);
         transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        text-decoration: none;
+        outline: none;
       }
 
       .start-cta-btn:hover {
-        background: rgba(0, 229, 255, 0.2);
+        background: rgba(12, 22, 40, 0.98);
         border-color: #ffffff;
-        color: #ffffff;
-        box-shadow: 0 0 35px rgba(0, 229, 255, 0.6);
+        box-shadow: 0 0 35px rgba(0, 240, 255, 0.8), inset 0 0 20px rgba(0, 240, 255, 0.3);
         transform: scale(1.05);
+      }
+
+      .cta-text {
+        font-family: 'Roboto Mono', monospace;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #ffffff;
+        letter-spacing: 0.18em;
+        margin-right: 18px;
+        text-transform: uppercase;
+      }
+
+      .cta-logo {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0 0 12px rgba(0, 240, 255, 0.5);
+        display: block;
       }
 
       /* 2. World-Space HTML Anchors Overlay Layer (#anchors-layer) */
@@ -337,6 +401,1105 @@
         align-items: center;
         padding-top: 24px;
       }
+
+      /* 5. OVERVIEW HTML/CSS Interface Overlay (#overviewUI) */
+      #overviewUI {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 20;
+        pointer-events: none;
+        transition: opacity 0.6s ease, visibility 0.6s ease;
+      }
+
+      #overviewUI.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      .overview-bottom-header {
+        position: absolute;
+        bottom: 44px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        pointer-events: none;
+        user-select: none;
+      }
+
+      .overview-title {
+        font-family: 'Roboto Mono', monospace;
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #ffffff;
+        letter-spacing: -0.01em;
+        margin-bottom: 8px;
+      }
+
+      .overview-subtitle {
+        font-family: 'Roboto Mono', monospace;
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #00f0ff;
+        letter-spacing: 0.02em;
+      }
+
+      .overview-subtitle .accent-purple {
+        color: #b545ff;
+      }
+
+      /* Node 1 Label Pill Card Anchor */
+      .overview-node-card {
+        position: absolute;
+        top: 0;
+        left: 0;
+        will-change: transform, opacity;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .overview-node-card.visible {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+
+      .overview-node-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        background: rgba(8, 14, 26, 0.92);
+        border: 2px solid #00f0ff;
+        border-radius: 40px;
+        padding: 8px 24px;
+        cursor: pointer;
+        box-shadow: 0 0 16px rgba(0, 240, 255, 0.4), inset 0 0 10px rgba(0, 240, 255, 0.15);
+        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        pointer-events: auto;
+        text-decoration: none;
+        outline: none;
+      }
+
+      .overview-node-btn:hover {
+        background: rgba(12, 22, 40, 0.98);
+        border-color: #ffffff;
+        box-shadow: 0 0 28px rgba(0, 240, 255, 0.8), inset 0 0 16px rgba(0, 240, 255, 0.3);
+        transform: scale(1.05);
+      }
+
+      .overview-node-btn .btn-text {
+        font-family: 'Roboto Mono', monospace;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #ffffff;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .overview-node-btn .btn-arrow {
+        color: #00f0ff;
+        stroke-width: 2.5;
+        transition: transform 0.3s ease, color 0.3s ease;
+      }
+
+      .overview-node-btn:hover .btn-arrow {
+        color: #ffffff;
+        transform: translateX(4px);
+      }
+
+      /* 6. Contextual HUD Infographic Cards (.nucleo-card) */
+      .nucleo-card {
+        position: absolute;
+        left: -880px;
+        top: -280px;
+        width: 880px;
+        background: rgba(3, 10, 20, 0.94);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 2px solid #00f0ff;
+        border-radius: 16px;
+        box-shadow: 0 0 45px rgba(0, 240, 255, 0.35), inset 0 0 25px rgba(0, 240, 255, 0.15);
+        padding: 34px 38px;
+        font-family: 'Roboto Mono', monospace;
+        color: #ffffff;
+        z-index: 30;
+        pointer-events: auto;
+      }
+
+      .nucleo-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+
+      .nucleo-header-title {
+        font-family: 'Roboto Mono', monospace;
+        font-size: 1.45rem;
+        font-weight: 700;
+        color: #00f0ff;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .nucleo-header-line {
+        width: 100%;
+        height: 2px;
+        background: rgba(0, 240, 255, 0.5);
+        box-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+        margin-bottom: 26px;
+      }
+
+      .n1-description {
+        font-size: 1.18rem;
+        font-weight: 400;
+        line-height: 1.7;
+        color: #00e5ff;
+        margin-bottom: 26px;
+      }
+
+      /* Inner Box for Equipo Shazam 2002 */
+      .n1-team-box {
+        border: 1.5px solid #00f0ff;
+        border-radius: 12px;
+        background: rgba(2, 16, 32, 0.68);
+        padding: 22px 24px 28px 24px;
+        text-align: center;
+        margin-bottom: 26px;
+      }
+
+      .n1-team-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #00f0ff;
+        margin-bottom: 24px;
+      }
+
+      .n1-silhouettes-container {
+        position: relative;
+        width: 100%;
+        height: 210px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .silhouette {
+        position: absolute;
+        width: 94px;
+        height: 94px;
+      }
+
+      .sil-top-left     { left: 16%; top: 10px; }
+      .sil-top-center   { left: 44%; top: 10px; }
+      .sil-top-right    { left: 72%; top: 10px; }
+      .sil-bottom-left  { left: 30%; top: 106px; }
+      .sil-bottom-right { left: 58%; top: 106px; }
+
+      .sil-svg {
+        width: 100%;
+        height: 100%;
+        filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.85));
+      }
+
+      /* Screen 2 Layout */
+      .n1-s2-layout {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 26px;
+        position: relative;
+      }
+
+      .n1-s2-left-box {
+        position: relative;
+        width: 270px;
+        height: 230px;
+        border: 1.5px solid #00f0ff;
+        border-radius: 12px;
+        background: rgba(2, 16, 32, 0.68);
+        padding: 12px;
+        flex-shrink: 0;
+      }
+
+      .n1-s2-silhouettes-container {
+        position: relative;
+        width: 100%;
+        height: 140px;
+      }
+
+      .sil-mini {
+        position: absolute;
+        width: 46px;
+        height: 46px;
+      }
+
+      .sil-mini-1 { left: 16px; top: 25px; }
+      .sil-mini-2 { left: 109px; top: 25px; }
+      .sil-mini-3 { left: 202px; top: 25px; }
+      .sil-mini-4 { left: 62px; top: 85px; }
+      .sil-mini-5 { left: 156px; top: 85px; }
+
+      .sil-mini-2.active {
+        width: 52px;
+        height: 52px;
+        left: 106px;
+        top: 22px;
+      }
+
+      .label-2026 {
+        position: absolute;
+        top: -22px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.98rem;
+        font-weight: 700;
+        color: #00f0ff;
+        letter-spacing: 0.05em;
+        text-shadow: 0 0 10px rgba(0, 240, 255, 0.9);
+      }
+
+      /* Precision Connecting Line SVG */
+      .connecting-line-svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 300px;
+        height: 230px;
+        pointer-events: none;
+        overflow: visible;
+        z-index: 5;
+      }
+
+      .n1-s2-photo-box {
+        width: 220px;
+        height: 220px;
+        flex-shrink: 0;
+        border: 2px solid #00f0ff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
+        position: relative;
+        z-index: 2;
+      }
+
+      .avery-photo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .n1-s2-text-box {
+        flex: 1;
+      }
+
+      .n1-description-s2 {
+        font-size: 1.12rem;
+        line-height: 1.68;
+        color: #00e5ff;
+      }
+
+      .highlight-purple {
+        color: #b545ff;
+        font-weight: 700;
+      }
+
+      .highlight-cyan {
+        color: #00f0ff;
+        font-weight: 700;
+      }
+
+      /* Nucleo Card Footer Controls */
+      .nucleo-card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 22px;
+      }
+
+      .pagination-dots {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        border: 2px solid rgba(0, 240, 255, 0.5);
+        background: transparent;
+        transition: all 0.3s ease;
+      }
+
+      .dot.active {
+        background: #00f0ff;
+        border-color: #00f0ff;
+        box-shadow: 0 0 14px #00f0ff;
+      }
+
+      .nucleo-next-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+        background: rgba(8, 20, 36, 0.94);
+        border: 2px solid #00f0ff;
+        border-radius: 38px;
+        padding: 10px 28px;
+        color: #ffffff;
+        font-family: 'Roboto Mono', monospace;
+        font-size: 1.02rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        cursor: pointer;
+        box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+        transition: all 0.3s ease;
+        outline: none;
+      }
+
+      .nucleo-next-btn:hover {
+        background: rgba(12, 28, 48, 0.98);
+        border-color: #ffffff;
+        box-shadow: 0 0 32px rgba(0, 240, 255, 0.85);
+        transform: scale(1.05);
+      }
+
+      /* Nucleo 2 Card Left Position for Viewport Fit (Requirement 1) */
+      .nucleo2-card {
+        left: -280px !important;
+        top: -240px;
+        width: 880px;
+      }
+
+      /* Nucleo 2 Pantalla 1 Interactive Keypad & Cellphone Styles */
+      .n2-p1-container {
+        position: relative;
+        width: 100%;
+      }
+
+      .n2-description {
+        font-size: 1.18rem;
+        line-height: 1.7;
+        color: #00e5ff;
+        margin-bottom: 26px;
+      }
+
+      .n2-interactive-layout {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        margin-top: 24px;
+        position: relative;
+        height: 260px;
+      }
+
+      /* Overlay SVG Layer for Component-to-Component Connectors */
+      .n2-overlay-svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: visible;
+        z-index: 1;
+      }
+
+      .n2-instruction-box {
+        position: relative;
+        width: 200px;
+        height: 240px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        z-index: 2;
+      }
+
+      .n2-instruction-title {
+        font-family: 'Roboto Mono', monospace;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #00f0ff;
+        letter-spacing: 0.04em;
+        padding-top: 10px;
+      }
+
+      .n2-keypad-box {
+        position: relative;
+        border: 2px solid #00f0ff;
+        border-radius: 16px;
+        background: rgba(2, 16, 32, 0.75);
+        padding: 16px;
+        box-shadow: 0 0 25px rgba(0, 240, 255, 0.35);
+        z-index: 2;
+      }
+
+      .keypad-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 56px);
+        gap: 12px;
+      }
+
+      .keypad-btn {
+        width: 56px;
+        height: 56px;
+        border: 1.5px solid #00f0ff;
+        border-radius: 12px;
+        background: rgba(4, 16, 32, 0.85);
+        color: #ffffff;
+        font-family: 'Roboto Mono', monospace;
+        font-size: 1.3rem;
+        font-weight: 700;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: inset 0 0 8px rgba(0, 240, 255, 0.2);
+      }
+
+      .keypad-btn:hover {
+        background: rgba(8, 28, 52, 0.95);
+        border-color: #ffffff;
+        box-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
+        transform: scale(1.06);
+      }
+
+      /* Pressed key visual feedback (cyan fill) */
+      .keypad-btn.selected-key {
+        border-color: #00f0ff;
+        background: rgba(0, 240, 255, 0.25);
+        box-shadow: 0 0 12px rgba(0, 240, 255, 0.5);
+      }
+
+      /* Resolved state active keys (bright cyan fill, black text) */
+      .keypad-btn.active {
+        background: #00f0ff !important;
+        color: #000000 !important;
+        border-color: #00f0ff !important;
+        font-weight: 800 !important;
+        box-shadow: 0 0 22px #00f0ff, inset 0 0 10px #ffffff !important;
+      }
+
+      .n2-cellphone-box {
+        position: relative;
+        width: 180px;
+        height: 240px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-end;
+        padding-bottom: 10px;
+        z-index: 2;
+      }
+
+      .cellphone-btn {
+        position: relative;
+        width: 140px;
+        height: 95px;
+        border-radius: 44px;
+        border: 2px solid rgba(0, 240, 255, 0.3);
+        background: rgba(4, 12, 24, 0.45);
+        color: rgba(0, 240, 255, 0.35);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        outline: none;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 3;
+      }
+
+      .cellphone-btn.disabled {
+        cursor: not-allowed;
+        pointer-events: none;
+        opacity: 0.45;
+      }
+
+      .cellphone-btn.enabled {
+        border-color: #00f0ff;
+        background: rgba(8, 24, 44, 0.95);
+        color: #00f0ff;
+        box-shadow: 0 0 35px rgba(0, 240, 255, 0.7);
+        cursor: pointer;
+        pointer-events: auto;
+        opacity: 1;
+        animation: pulsePhone 2s infinite ease-in-out;
+      }
+
+      /* Nucleo 2 Pantalla 2 Carga (3.5s) & Carga Completa Styles */
+      .n2-loading-layout {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        padding: 30px 0;
+        min-height: 240px;
+      }
+
+      .phone-listening-pill {
+        width: 140px;
+        height: 95px;
+        border-radius: 44px;
+        background: #00f0ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 35px rgba(0, 240, 255, 0.7);
+        flex-shrink: 0;
+      }
+
+      .phone-listening-pill.small {
+        width: 110px;
+        height: 80px;
+        border-radius: 36px;
+      }
+
+      .ring-loader-box {
+        position: relative;
+        width: 95px;
+        height: 95px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .ring-loader-spinner {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 3px solid rgba(0, 240, 255, 0.2);
+        border-top: 3px solid #00f0ff;
+        border-right: 3px solid #00f0ff;
+        box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+        animation: spinRing 1.2s infinite linear;
+      }
+
+      @keyframes spinRing {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      .ring-loader-text {
+        font-family: 'Roboto Mono', monospace;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #00f0ff;
+        letter-spacing: 0.04em;
+        text-shadow: 0 0 8px rgba(0, 240, 255, 0.7);
+      }
+
+      /* Pantalla 2 Estado 2 (Carga Completa) Result Layout */
+      .n2-result-layout {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 28px;
+        padding: 10px 0 20px 0;
+      }
+
+      .n2-sms-arrow-box {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .sms-icon-box {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        border: 2px solid #00f0ff;
+        background: rgba(4, 16, 32, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+      }
+
+      .n2-song-card-box {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+      }
+
+      .eminem-album-frame {
+        width: 180px;
+        height: 180px;
+        border: 2px solid #00f0ff;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
+      }
+
+      .eminem-cover-photo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .song-details-text {
+        font-family: 'Roboto Mono', monospace;
+      }
+
+      .song-title-line {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #00f0ff;
+        margin-bottom: 6px;
+      }
+
+      .shazam-count-line {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #00e5ff;
+        opacity: 0.9;
+      }
+
+      .peak-dot.p1 { left: 30%; top: 40%; }
+      .peak-dot.p2 { left: 60%; top: 25%; background: #b545ff; box-shadow: 0 0 10px #b545ff; }
+      .peak-dot.p3 { left: 80%; top: 60%; }
+
+      .hash-lines-svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Nucleo 3 Purple Theme & Layout Styles */
+      .nucleo3-card {
+        left: -380px !important;
+        top: -240px;
+        width: 880px;
+        border: 2px solid #b545ff !important;
+        box-shadow: 0 0 45px rgba(181, 69, 255, 0.35), inset 0 0 25px rgba(181, 69, 255, 0.15) !important;
+      }
+
+      .purple-title {
+        color: #b545ff !important;
+      }
+
+      .purple-line {
+        background: rgba(181, 69, 255, 0.5) !important;
+        box-shadow: 0 0 12px rgba(181, 69, 255, 0.6) !important;
+      }
+
+      .purple-btn {
+        border-color: #b545ff !important;
+        box-shadow: 0 0 20px rgba(181, 69, 255, 0.4) !important;
+      }
+
+      .purple-btn:hover {
+        border-color: #ffffff !important;
+        box-shadow: 0 0 32px rgba(181, 69, 255, 0.85) !important;
+      }
+
+      .purple-text {
+        color: #b545ff !important;
+      }
+
+      .n3-description {
+        font-size: 1.18rem;
+        line-height: 1.7;
+        color: #00e5ff;
+        margin-bottom: 26px;
+      }
+
+      /* Pantalla 1 Layout & Infinite Pointer Hand Animation GIF */
+      .n3-p1-layout {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        padding: 15px 0 25px 0;
+      }
+
+      .n3-hand-pointer-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .n3-hand-anim-gif {
+        max-width: 220px;
+        height: auto;
+        display: block;
+        filter: drop-shadow(0 0 16px rgba(181, 69, 255, 0.6));
+      }
+
+      .n3-phone-frame {
+        position: relative;
+        width: 170px;
+        height: 250px;
+        border: 2.5px solid #b545ff;
+        border-radius: 28px;
+        background: rgba(3, 10, 24, 0.75);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 30px rgba(181, 69, 255, 0.4);
+      }
+
+      .n3-phone-frame.small-phone {
+        width: 140px;
+        height: 210px;
+        border-radius: 24px;
+        flex-shrink: 0;
+      }
+
+      .n3-shazam-app-btn {
+        width: 76px;
+        height: 76px;
+        border-radius: 50%;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        outline: none;
+        transition: transform 0.3s ease;
+      }
+
+      .n3-shazam-app-btn:hover {
+        transform: scale(1.12);
+      }
+
+      .n3-shazam-logo-img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        box-shadow: 0 0 22px rgba(0, 240, 255, 0.8);
+      }
+
+      .ear-icon-circle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 2px solid #00f0ff;
+        background: rgba(4, 16, 32, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 16px rgba(0, 240, 255, 0.5);
+      }
+
+      /* Pantalla 2 & 3 Audio Spectrum Styles */
+      .n3-p2-layout, .n3-p3-layout, .n3-p4-layout, .n3-p5-layout {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        padding: 10px 0 20px 0;
+      }
+
+      .n3-spectrum-box, .n3-peaks-container, .n3-fingerprint-overlay-container {
+        position: relative;
+        flex: 1;
+        height: 180px;
+        border: 1.5px solid rgba(181, 69, 255, 0.4);
+        border-radius: 14px;
+        background: rgba(2, 10, 20, 0.7);
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .spectrum-svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      .dark-blur-overlay-band {
+        position: absolute;
+        width: 100%;
+        height: 70px;
+        background: rgba(2, 8, 18, 0.85);
+        backdrop-filter: blur(8px);
+        z-index: 2;
+      }
+
+      /* Peak Highlight Boxes */
+      .peak-highlight-box {
+        position: absolute;
+        width: 50px;
+        height: 80px;
+        border: 2px solid #b545ff;
+        border-radius: 10px;
+        background: rgba(181, 69, 255, 0.15);
+        box-shadow: 0 0 15px rgba(181, 69, 255, 0.6);
+        z-index: 3;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding: 6px;
+      }
+
+      .peak-highlight-box.p1 { left: 15%; top: 15px; }
+      .peak-highlight-box.p2 { left: 35%; top: 85px; }
+      .peak-highlight-box.p3 { left: 60%; top: 15px; }
+      .peak-highlight-box.p4 { left: 80%; top: 25px; }
+
+      .peak-highlight-box.opacity-50 {
+        opacity: 0.5;
+      }
+
+      .peak-bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 3px;
+        width: 100%;
+        height: 100%;
+      }
+
+      .peak-bars .bar {
+        flex: 1;
+        background: #00f0ff;
+        border-radius: 2px;
+      }
+
+      .bar.h-40 { height: 40%; }
+      .bar.h-50 { height: 50%; }
+      .bar.h-60 { height: 60%; }
+      .bar.h-65 { height: 65%; }
+      .bar.h-70 { height: 70%; }
+      .bar.h-75 { height: 75%; }
+      .bar.h-80 { height: 80%; }
+      .bar.h-85 { height: 85%; }
+      .bar.h-90 { height: 90%; }
+      .bar.h-95 { height: 95%; }
+      .bar.h-100 { height: 100%; }
+
+      /* Central Fingerprint Circle */
+      .central-fingerprint-circle {
+        position: relative;
+        z-index: 5;
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        border: 2px solid #b545ff;
+        background: rgba(3, 10, 24, 0.95);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 35px rgba(181, 69, 255, 0.8);
+      }
+
+      .fingerprint-card-box {
+        width: 140px;
+        height: 140px;
+        border-radius: 36px;
+        border: 2px solid #b545ff;
+        background: rgba(3, 10, 24, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 30px rgba(181, 69, 255, 0.6);
+        flex-shrink: 0;
+      }
+
+      .n3-song-card-box {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+      }
+
+      .robin-album-frame {
+        width: 180px;
+        height: 180px;
+        border: 2px solid #b545ff;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 0 25px rgba(181, 69, 255, 0.6);
+      }
+
+      .robin-cover-photo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      /* Pantalla 6 Triangular Spectro-Radar Graph & Hover Tooltip Styles */
+      .n3-p6-layout {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 30px;
+        padding: 10px 0;
+        position: relative;
+      }
+
+      .p6-legend-box {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        width: 210px;
+        flex-shrink: 0;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .legend-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      .cyan-dot {
+        background: #00f0ff;
+        box-shadow: 0 0 10px #00f0ff;
+      }
+
+      .purple-dot {
+        background: #b545ff;
+        box-shadow: 0 0 10px #b545ff;
+      }
+
+      .legend-label {
+        font-family: 'Roboto Mono', monospace;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #ffffff;
+      }
+
+      .p6-graph-container {
+        position: relative;
+        width: 480px;
+        height: 280px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .radar-triangle-svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Vertex Interactive Zones */
+      .vertex-zone {
+        position: absolute;
+        cursor: pointer;
+        z-index: 10;
+      }
+
+      .vertex-zone.v-top {
+        top: 0px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+      }
+
+      .vertex-zone.v-left {
+        bottom: 0px;
+        left: 10px;
+        text-align: left;
+      }
+
+      .vertex-zone.v-right {
+        bottom: 0px;
+        right: 10px;
+        text-align: right;
+      }
+
+      .vertex-title {
+        font-family: 'Roboto Mono', monospace;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #ffffff;
+        letter-spacing: 0.04em;
+        text-shadow: 0 0 8px rgba(0, 0, 0, 0.9);
+      }
+
+      /* Tooltip values: HIDDEN BY DEFAULT, VISIBLE ONLY ON HOVER */
+      .vertex-hover-tooltip {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+        position: absolute;
+        background: rgba(3, 10, 22, 0.96);
+        border: 1.5px solid #b545ff;
+        border-radius: 8px;
+        padding: 8px 14px;
+        font-family: 'Roboto Mono', monospace;
+        font-size: 0.85rem;
+        z-index: 20;
+        white-space: nowrap;
+        box-shadow: 0 0 20px rgba(181, 69, 255, 0.6);
+        transform: translateY(4px);
+      }
+
+      .v-top .vertex-hover-tooltip {
+        top: 26px;
+        left: 50%;
+        transform: translateX(-50%) translateY(4px);
+      }
+
+      .v-left .vertex-hover-tooltip {
+        bottom: 26px;
+        left: 0;
+      }
+
+      .v-right .vertex-hover-tooltip {
+        bottom: 26px;
+        right: 0;
+      }
+
+      .vertex-hover-tooltip.visible {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
+
+      .v-top .vertex-hover-tooltip.visible {
+        transform: translateX(-50%) translateY(0);
+      }
+
+      .val-cyan {
+        color: #00f0ff;
+        font-weight: 700;
+        margin-bottom: 3px;
+      }
+
+      .val-purple {
+        color: #b545ff;
+        font-weight: 700;
+      }
+
+      /* Node 3 & Node 4 Purple Overview Buttons */
+      .overview-node-btn.purple-node-btn {
+        border-color: #b545ff !important;
+        box-shadow: 0 0 16px rgba(181, 69, 255, 0.4), inset 0 0 10px rgba(181, 69, 255, 0.15) !important;
+      }
+
+      .overview-node-btn.purple-node-btn .btn-arrow {
+        color: #b545ff !important;
+      }
+
+      .overview-node-btn.purple-node-btn:hover {
+        border-color: #ffffff !important;
+        box-shadow: 0 0 28px rgba(181, 69, 255, 0.8), inset 0 0 16px rgba(181, 69, 255, 0.3) !important;
+      }
     </style>
   </head>
   <body>
@@ -344,7 +1507,69 @@
       <!-- 1. Start Screen Overlay (#startScreen) -->
       <div id="startScreen">
         <div class="start-content">
-          <button id="startCTA" class="start-cta-btn">COMENZAR</button>
+          <h1 class="start-title">¡Esto me suena!</h1>
+          <h2 class="start-subtitle">Shazam, origen y <span class="accent-purple">actualidad</span></h2>
+          <div class="start-divider"></div>
+          <p class="start-description">
+            A todos nos habrá pasado de escuchar por la radio una canción que nos suena pero no logramos identificar. Para solucionar este problema, intelectuales británicos crearon “Shazam”.Pero la pregunta es: ¿Cómo funciona Shazam? Para esto necesitamos analizar sus orígenes y su estado actual.
+          </p>
+          <button id="startCTA" class="start-cta-btn">
+            <span class="cta-text">COMENZAR</span>
+            <img src="references/menu_inicio/Shazam_Logo.png" alt="Shazam Logo" class="cta-logo" />
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. OVERVIEW HTML/CSS Interface Overlay (#overviewUI) -->
+      <div id="overviewUI" class="hidden">
+        <!-- Node 0 Label Pill Card (ORÍGENES ->) -->
+        <div id="overviewNodeAnchor0" class="overview-node-card">
+          <button id="overviewNode0Btn" class="overview-node-btn" data-node-index="0">
+            <span class="btn-text">ORÍGENES</span>
+            <svg class="btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Node 1 Label Pill Card (¿CÓMO FUNCIONABA? ->) -->
+        <div id="overviewNodeAnchor1" class="overview-node-card">
+          <button id="overviewNode1Btn" class="overview-node-btn" data-node-index="1">
+            <span class="btn-text">¿CÓMO FUNCIONABA?</span>
+            <svg class="btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Node 2 Label Pill Card (¿COMO FUNCIONA? ->) -->
+        <div id="overviewNodeAnchor2" class="overview-node-card">
+          <button id="overviewNode2Btn" class="overview-node-btn" data-node-index="2">
+            <span class="btn-text">¿COMO FUNCIONA?</span>
+            <svg class="btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Node 3 Label Pill Card (RECORDS SHAZAMS ->) -->
+        <div id="overviewNodeAnchor3" class="overview-node-card">
+          <button id="overviewNode3Btn" class="overview-node-btn" data-node-index="3">
+            <span class="btn-text">RECORDS SHAZAMS</span>
+            <svg class="btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Bottom Header Section (Title & Subtitle) -->
+        <div class="overview-bottom-header">
+          <h1 class="overview-title">¡Esto me suena!</h1>
+          <h2 class="overview-subtitle">Shazam, origen y <span class="accent-purple">actualidad</span></h2>
         </div>
       </div>
 
@@ -371,6 +1596,6 @@
     </div>
 
     <!-- Application Script Entry Point -->
-    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="./src/main.js"></script>
   </body>
 </html>

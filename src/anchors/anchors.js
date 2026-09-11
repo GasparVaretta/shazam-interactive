@@ -16,6 +16,7 @@ export class WorldSpaceAnchorManager {
     this.nodeOrbGroups = [];
     this.projVector = new THREE.Vector3();
     this.maxUnlockedIndex = 0;
+    this.hoveredNodeIndex = -1;
     this.activeNodeIndex = -1;
   }
 
@@ -23,6 +24,23 @@ export class WorldSpaceAnchorManager {
     this.overlayContainer = overlayContainer || document.getElementById('anchors-layer');
     this.nodeOrbGroups = nodeOrbGroups || [];
     if (!this.overlayContainer) return;
+
+    // Bind DOM mouseenter / mouseleave for HTML overview node cards (0, 1, 2, 3)
+    this.nodes.forEach((_, idx) => {
+      const overviewBtn = document.getElementById(`overviewNode${idx}Btn`);
+      if (overviewBtn) {
+        overviewBtn.addEventListener('mouseenter', () => {
+          if (idx <= this.maxUnlockedIndex && this.activeNodeIndex === -1) {
+            this.hoveredNodeIndex = idx;
+          }
+        });
+        overviewBtn.addEventListener('mouseleave', () => {
+          if (this.hoveredNodeIndex === idx) {
+            this.hoveredNodeIndex = -1;
+          }
+        });
+      }
+    });
 
     // Create 4 DOM Anchor Elements
     this.nodes.forEach((node, idx) => {
@@ -56,6 +74,10 @@ export class WorldSpaceAnchorManager {
       this.overlayContainer.appendChild(el);
       this.anchorElements.push(el);
     });
+  }
+
+  setHoveredNode(hoveredIndex) {
+    this.hoveredNodeIndex = hoveredIndex;
   }
 
   onAnchorClick(cb) {
@@ -110,6 +132,39 @@ export class WorldSpaceAnchorManager {
       } else {
         el.style.opacity = '0';
         el.style.pointerEvents = 'none';
+      }
+    });
+
+    // Dynamic positioning for OVERVIEW Node Cards (#overviewNodeAnchor0..3)
+    this.nodes.forEach((_, idx) => {
+      const overviewCard = document.getElementById(`overviewNodeAnchor${idx}`);
+      if (overviewCard && this.nodeOrbGroups[idx]) {
+        this.nodeOrbGroups[idx].getWorldPosition(this.projVector);
+        this.projVector.project(this.camera);
+
+        if (this.projVector.z < 1.0) {
+          const x = (this.projVector.x * 0.5 + 0.5) * width;
+          const y = (-this.projVector.y * 0.5 + 0.5) * height;
+
+          const cardWidth = overviewCard.offsetWidth || 180;
+          const cardHeight = overviewCard.offsetHeight || 44;
+
+          const cardX = x - cardWidth - 20;
+          const cardY = y - cardHeight / 2;
+
+          overviewCard.style.transform = `translate3d(${cardX}px, ${cardY}px, 0px)`;
+
+          // Title is VISIBLE ONLY when hovered, node is unlocked (idx <= maxUnlockedIndex), and in OVERVIEW mode (activeNodeIndex === -1)!
+          const isNodeHovered = (this.hoveredNodeIndex === idx) && (idx <= this.maxUnlockedIndex) && (this.activeNodeIndex === -1);
+
+          if (isNodeHovered) {
+            overviewCard.classList.add('visible');
+          } else {
+            overviewCard.classList.remove('visible');
+          }
+        } else {
+          overviewCard.classList.remove('visible');
+        }
       }
     });
   }
