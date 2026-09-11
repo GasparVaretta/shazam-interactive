@@ -93,16 +93,9 @@ export class Nucleo3UI {
             </p>
 
             <div class="n3-p1-layout">
-              <!-- Exact pantalla1_animacion.gif Asset (Infinite Loop Hand Animation) -->
-              <div class="n3-hand-pointer-box">
-                <img src="references/nucleo_3/assets_mockups/pantalla1_animacion.gif" class="n3-hand-anim-gif" alt="Mano Animada" />
-              </div>
-
-              <!-- Phone Frame with Exact Shazam_Logo.png Asset from ASSETS_MOCKUPS -->
-              <div class="n3-phone-frame" id="n3-p1-phone">
-                <button class="n3-shazam-app-btn" id="n3-shazam-app-btn" title="Haz clic para iniciar el análisis">
-                  <img src="references/nucleo_3/assets_mockups/Shazam_Logo.png" alt="Shazam App Icon" class="n3-shazam-logo-img" />
-                </button>
+              <!-- celularshazam.png — Asset principal centrado con bordes neon -->
+              <div class="n3-celular-frame" id="n3-p1-phone">
+                <img src="references/nucleo_3/assets_mockups/celularshazam.png" alt="Shazam en celular" class="n3-celular-img" />
               </div>
             </div>
 
@@ -126,25 +119,7 @@ export class Nucleo3UI {
             </p>
 
             <div class="n3-p2-layout">
-              <!-- Left Phone Frame -->
-              <div class="n3-phone-frame small-phone">
-                <div class="ear-icon-circle">
-                  <svg viewBox="0 0 48 48" width="34" height="34">
-                    <path d="M 28 10 C 32 10, 35 13, 35 17 C 35 21, 31 23, 31 25 C 31 26, 32 27, 34 27" fill="none" stroke="#00f0ff" stroke-width="2.5" stroke-linecap="round" />
-                    <path d="M 38 12 C 41 15, 41 19, 38 22" fill="none" stroke="#00f0ff" stroke-width="2.5" stroke-linecap="round" />
-                    <path d="M 42 9 C 46 14, 46 22, 42 26" fill="none" stroke="#00f0ff" stroke-width="2.5" stroke-linecap="round" />
-                  </svg>
-                </div>
-              </div>
-
-              <!-- Right Spectrum Audio Visualizer -->
-              <div class="n3-spectrum-box">
-                <svg class="spectrum-svg" viewBox="0 0 450 140" preserveAspectRatio="none">
-                  <path d="M 0 70 Q 25 30 50 70 T 100 70 T 150 20 T 200 110 T 250 30 T 300 90 T 350 40 T 400 80 T 450 70" fill="none" stroke="#0088ff" stroke-width="3" />
-                  <path d="M 0 70 Q 20 10 40 70 T 90 70 T 140 10 T 190 120 T 240 15 T 290 100 T 340 25 T 390 90 T 450 70" fill="none" stroke="#00f0ff" stroke-width="2" opacity="0.85" />
-                  <path d="M 0 70 Q 30 50 60 70 T 120 70 T 170 30 T 220 95 T 270 40 T 320 80 T 370 50 T 450 70" fill="none" stroke="#b545ff" stroke-width="2.5" opacity="0.9" />
-                </svg>
-              </div>
+              <img src="references/nucleo_3/assets_mockups/celularfoto.png" alt="Espectrograma: el audio convertido en imagen" class="n3-espectrograma-img" />
             </div>
 
             <!-- Footer Controls -->
@@ -173,61 +148,7 @@ export class Nucleo3UI {
             </p>
 
             <div class="n3-p3-layout">
-              <!-- Left Phone Frame -->
-              <div class="n3-phone-frame small-phone">
-                <div class="ear-icon-circle">
-                  <svg viewBox="0 0 48 48" width="34" height="34">
-                    <path d="M 28 10 C 32 10, 35 13, 35 17 C 35 21, 31 23, 31 25 C 31 26, 32 27, 34 27" fill="none" stroke="#00f0ff" stroke-width="2.5" stroke-linecap="round" />
-                    <path d="M 38 12 C 41 15, 41 19, 38 22" fill="none" stroke="#00f0ff" stroke-width="2.5" stroke-linecap="round" />
-                  </svg>
-                </div>
-              </div>
-
-              <!-- Spectrum Container with Dark Translucent Band & 4 Highlighted Peak Boxes -->
-              <div class="n3-peaks-container">
-                <div class="dark-blur-overlay-band"></div>
-
-                <svg class="spectrum-svg" viewBox="0 0 450 140" preserveAspectRatio="none">
-                  <path d="M 0 70 Q 25 30 50 70 T 100 70 T 150 20 T 200 110 T 250 30 T 300 90 T 350 40 T 400 80 T 450 70" fill="none" stroke="#0055aa" stroke-width="2" opacity="0.4" />
-                  <path d="M 0 70 Q 20 10 40 70 T 90 70 T 140 10 T 190 120 T 240 15 T 290 100 T 340 25 T 390 90 T 450 70" fill="none" stroke="#00e5ff" stroke-width="2.5" />
-                </svg>
-
-                <!-- Peak Box 1 (Top Left) -->
-                <div class="peak-highlight-box p1">
-                  <div class="peak-bars">
-                    <span class="bar h-60"></span>
-                    <span class="bar h-90"></span>
-                    <span class="bar h-40"></span>
-                  </div>
-                </div>
-
-                <!-- Peak Box 2 (Bottom Mid-Left) -->
-                <div class="peak-highlight-box p2">
-                  <div class="peak-bars">
-                    <span class="bar h-50"></span>
-                    <span class="bar h-85"></span>
-                    <span class="bar h-65"></span>
-                  </div>
-                </div>
-
-                <!-- Peak Box 3 (Top Mid-Right) -->
-                <div class="peak-highlight-box p3">
-                  <div class="peak-bars">
-                    <span class="bar h-70"></span>
-                    <span class="bar h-100"></span>
-                    <span class="bar h-80"></span>
-                  </div>
-                </div>
-
-                <!-- Peak Box 4 (Top Far-Right) -->
-                <div class="peak-highlight-box p4">
-                  <div class="peak-bars">
-                    <span class="bar h-75"></span>
-                    <span class="bar h-95"></span>
-                    <span class="bar h-55"></span>
-                  </div>
-                </div>
-              </div>
+              <img src="references/nucleo_3/assets_mockups/celularpicos.png" alt="Filtrado de picos: puntos más intensos del espectrograma" class="n3-picos-img" />
             </div>
 
             <!-- Footer Controls -->
@@ -256,37 +177,7 @@ export class Nucleo3UI {
             </p>
 
             <div class="n3-p4-layout">
-              <!-- Left Phone Frame -->
-              <div class="n3-phone-frame small-phone">
-                <div class="ear-icon-circle">
-                  <svg viewBox="0 0 48 48" width="34" height="34">
-                    <path d="M 28 10 C 32 10, 35 13, 35 17 C 35 21, 31 23, 31 25 C 31 26, 32 27, 34 27" fill="none" stroke="#00f0ff" stroke-width="2.5" stroke-linecap="round" />
-                  </svg>
-                </div>
-              </div>
-
-              <!-- Spectrum Container with Central Purple Fingerprint Overlay -->
-              <div class="n3-fingerprint-overlay-container">
-                <div class="dark-blur-overlay-band"></div>
-
-                <!-- 4 Highlight Boxes Behind Fingerprint -->
-                <div class="peak-highlight-box p1 opacity-50"></div>
-                <div class="peak-highlight-box p2 opacity-50"></div>
-                <div class="peak-highlight-box p3 opacity-50"></div>
-                <div class="peak-highlight-box p4 opacity-50"></div>
-
-                <!-- Central Prominent Fingerprint Circle -->
-                <div class="central-fingerprint-circle">
-                  <svg viewBox="0 0 64 64" width="70" height="70">
-                    <path d="M 32 12 C 22 12, 14 20, 14 30 L 14 42" fill="none" stroke="#b545ff" stroke-width="3" stroke-linecap="round" />
-                    <path d="M 32 18 C 25 18, 20 23, 20 30 L 20 46" fill="none" stroke="#b545ff" stroke-width="3" stroke-linecap="round" />
-                    <path d="M 32 24 C 28 24, 26 27, 26 30 L 26 50" fill="none" stroke="#b545ff" stroke-width="3" stroke-linecap="round" />
-                    <path d="M 32 30 C 32 32, 31 34, 31 36 L 31 48" fill="none" stroke="#b545ff" stroke-width="3" stroke-linecap="round" />
-                    <path d="M 38 20 C 44 24, 46 30, 46 36 L 46 44" fill="none" stroke="#b545ff" stroke-width="3" stroke-linecap="round" />
-                    <path d="M 40 28 C 42 31, 42 35, 42 40" fill="none" stroke="#b545ff" stroke-width="3" stroke-linecap="round" />
-                  </svg>
-                </div>
-              </div>
+              <img src="references/nucleo_3/assets_mockups/celularpicoshuella.png" alt="Huella digital: picos convertidos en huella de la canción" class="n3-huella-img" />
             </div>
 
             <!-- Footer Controls -->
@@ -315,21 +206,10 @@ export class Nucleo3UI {
             </p>
 
             <div class="n3-p5-layout">
-              <!-- Left: Purple Fingerprint Squircle Card -->
-              <div class="fingerprint-card-box">
-                <svg viewBox="0 0 64 64" width="60" height="60">
-                  <path d="M 32 12 C 22 12, 14 20, 14 30 L 14 42" fill="none" stroke="#b545ff" stroke-width="3" stroke-linecap="round" />
-                  <path d="M 32 18 C 25 18, 20 23, 20 30 L 20 46" fill="none" stroke="#b545ff" stroke-width="3" stroke-linecap="round" />
-                  <path d="M 32 24 C 28 24, 26 27, 26 30 L 26 50" fill="none" stroke="#b545ff" stroke-width="3" stroke-linecap="round" />
-                  <path d="M 38 20 C 44 24, 46 30, 46 36 L 46 44" fill="none" stroke="#b545ff" stroke-width="3" stroke-linecap="round" />
-                </svg>
+              <!-- Left: Huella y flecha integrada -->
+              <div class="n3-huellaflecha-frame">
+                <img src="references/nucleo_3/assets_mockups/huellaflecha.png" alt="Huella y flecha hacia la canción" class="n3-huellaflecha-img" />
               </div>
-
-              <!-- Center: Purple Right Arrow -->
-              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#b545ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
 
               <!-- Right: Robin Schulz Album Cover & Song Details -->
               <div class="n3-song-card-box">
@@ -337,7 +217,7 @@ export class Nucleo3UI {
                   <img src="${albumSrc}" class="robin-cover-photo" alt="Robin Schulz - Prayer in C" />
                 </div>
                 <div class="song-details-text">
-                  <div class="song-title-line purple-text">Tu cancion es: “Prayer in C” de Robin Schulz</div>
+                  <div class="song-title-line">Tu cancion es: “Prayer in C” de Robin Schulz</div>
                   <div class="shazam-count-line">20 millones Shazams (2015).</div>
                 </div>
               </div>
@@ -362,7 +242,7 @@ export class Nucleo3UI {
             </div>
           </div>
 
-          <!-- PANTALLA 6: Comparativas Antes vs Hoy (Gráfico Triangular con Hover) -->
+          <!-- PANTALLA 6: Comparativas Antes vs Hoy (Gráfico Triangular) -->
           <div id="n3-screen-6" class="n3-screen" style="display: none;">
             <div class="n3-p6-layout">
               <!-- Left Legend -->
@@ -379,60 +259,55 @@ export class Nucleo3UI {
 
               <!-- Center Triangular Spectro-Radar Graph -->
               <div class="p6-graph-container">
-                <svg class="radar-triangle-svg" viewBox="0 0 360 280">
+                <!-- Top Axis Data: Canciones en el catálogo -->
+                <div class="vertex-block v-top">
+                  <div class="vertex-title">Canciones en el catalogo</div>
+                  <div class="val-cyan">+20 millones (2002)</div>
+                  <div class="val-purple">+100.000 millones (2026)</div>
+                </div>
+
+                <!-- Central Radar Triangle SVG -->
+                <svg class="radar-triangle-svg" viewBox="0 0 360 250">
                   <!-- Outer Base Triangle (Purple Boundary) -->
-                  <polygon points="180,20 40,240 320,240" fill="rgba(124, 58, 237, 0.08)" stroke="#7c3aed" stroke-width="2.5" />
+                  <polygon points="180,45 65,215 295,215" fill="rgba(94, 0, 255, 0.08)" stroke="#5E00FF" stroke-width="2.5" />
+
+                  <!-- Inner Grid Triangle -->
+                  <polygon points="180,102 122,187 238,187" fill="none" stroke="rgba(94, 0, 255, 0.3)" stroke-dasharray="3,3" stroke-width="1.2" />
 
                   <!-- 3 Center Axis Lines -->
-                  <line x1="180" y1="140" x2="180" y2="20" stroke="rgba(181, 69, 255, 0.4)" stroke-dasharray="3,3" stroke-width="1.5" />
-                  <line x1="180" y1="140" x2="40" y2="240" stroke="rgba(181, 69, 255, 0.4)" stroke-dasharray="3,3" stroke-width="1.5" />
-                  <line x1="180" y1="140" x2="320" y2="240" stroke="rgba(181, 69, 255, 0.4)" stroke-dasharray="3,3" stroke-width="1.5" />
+                  <line x1="180" y1="158" x2="180" y2="45" stroke="rgba(94, 0, 255, 0.4)" stroke-dasharray="3,3" stroke-width="1.5" />
+                  <line x1="180" y1="158" x2="65" y2="215" stroke="rgba(94, 0, 255, 0.4)" stroke-dasharray="3,3" stroke-width="1.5" />
+                  <line x1="180" y1="158" x2="295" y2="215" stroke="rgba(94, 0, 255, 0.4)" stroke-dasharray="3,3" stroke-width="1.5" />
 
                   <!-- Series 2002 (Cyan Polygon) -->
-                  <polygon points="180,94 65,222 229,175" fill="rgba(0, 240, 255, 0.18)" stroke="#00f0ff" stroke-width="2.5" />
+                  <polygon points="180,110 82,204 225,180" fill="rgba(0, 240, 255, 0.18)" stroke="#00f0ff" stroke-width="2.5" />
 
                   <!-- Series 2002 Dots -->
-                  <circle cx="180" cy="94" r="5" fill="#00f0ff" />
-                  <circle cx="65" cy="222" r="5" fill="#00f0ff" />
-                  <circle cx="229" cy="175" r="5" fill="#00f0ff" />
+                  <circle cx="180" cy="110" r="5" fill="#00f0ff" />
+                  <circle cx="82" cy="204" r="5" fill="#00f0ff" />
+                  <circle cx="225" cy="180" r="5" fill="#00f0ff" />
 
-                  <!-- Series 2026 (Purple/Lavender Polygon) -->
-                  <polygon points="180,20 145,165 320,240" fill="rgba(129, 140, 248, 0.18)" stroke="#818cf8" stroke-width="2.5" />
+                  <!-- Series 2026 (Periwinkle/Violet Polygon) -->
+                  <polygon points="180,45 150,172 295,215" fill="rgba(129, 140, 248, 0.18)" stroke="#818cf8" stroke-width="2.5" />
 
                   <!-- Series 2026 Dots -->
-                  <circle cx="180" cy="20" r="6" fill="#818cf8" />
-                  <circle cx="145" cy="165" r="6" fill="#818cf8" />
-                  <circle cx="320" cy="240" r="6" fill="#818cf8" />
+                  <circle cx="180" cy="45" r="6" fill="#818cf8" />
+                  <circle cx="150" cy="172" r="6" fill="#818cf8" />
+                  <circle cx="295" cy="215" r="6" fill="#818cf8" />
                 </svg>
 
-                <!-- Interactive Vertex 1 (Top: Canciones en el catálogo) -->
-                <div class="vertex-zone v-top" data-vertex="top">
-                  <div class="vertex-title">Canciones en el catalogo</div>
-                  <!-- Hidden by Default -> Popup Tooltip on Hover ONLY -->
-                  <div class="vertex-hover-tooltip" id="tooltip-top">
-                    <div class="val-cyan">+20 millones (2002)</div>
-                    <div class="val-purple">+100.000 millones (2026)</div>
-                  </div>
-                </div>
-
-                <!-- Interactive Vertex 2 (Bottom-Left: Tiempo de procesado) -->
-                <div class="vertex-zone v-left" data-vertex="left">
+                <!-- Bottom-Left Axis Data: Tiempo de procesado -->
+                <div class="vertex-block v-left">
                   <div class="vertex-title">Tiempo de procesado</div>
-                  <!-- Hidden by Default -> Popup Tooltip on Hover ONLY -->
-                  <div class="vertex-hover-tooltip" id="tooltip-left">
-                    <div class="val-cyan">15-30 segundos (2002)</div>
-                    <div class="val-purple">3-7 segundos (2026)</div>
-                  </div>
+                  <div class="val-cyan">15-30 segundos (2002)</div>
+                  <div class="val-purple">3-7 segundos (2026)</div>
                 </div>
 
-                <!-- Interactive Vertex 3 (Bottom-Right: Usuarios activos) -->
-                <div class="vertex-zone v-right" data-vertex="right">
+                <!-- Bottom-Right Axis Data: Usuarios activos -->
+                <div class="vertex-block v-right">
                   <div class="vertex-title">Usuarios activos</div>
-                  <!-- Hidden by Default -> Popup Tooltip on Hover ONLY -->
-                  <div class="vertex-hover-tooltip" id="tooltip-right">
-                    <div class="val-cyan">500.000 usuarios (2002)</div>
-                    <div class="val-purple">+300 millones (2026)</div>
-                  </div>
+                  <div class="val-cyan">500.000 usuarios (2002)</div>
+                  <div class="val-purple">+300 millones (2026)</div>
                 </div>
               </div>
             </div>
@@ -465,16 +340,7 @@ export class Nucleo3UI {
   }
 
   bindEvents() {
-    // Screen 1: Clicking Shazam App Button advances to Screen 2
-    const shazamBtn = this.container.querySelector('#n3-shazam-app-btn');
-    if (shazamBtn) {
-      shazamBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        this.goToScreen(2);
-      });
-    }
-
-    // Next Buttons
+    // Screen 1: Next button advances to Screen 2
     const next1 = this.container.querySelector('#n3-next-1');
     if (next1) next1.addEventListener('click', (e) => { e.stopPropagation(); this.goToScreen(2); });
 
@@ -517,19 +383,6 @@ export class Nucleo3UI {
         }
       });
     }
-
-    // Pantalla 6 Vertex Hover Events for Data Tooltips (Hidden by default, visible on hover ONLY)
-    const vertexZones = this.container.querySelectorAll('.vertex-zone');
-    vertexZones.forEach((zone) => {
-      zone.addEventListener('mouseenter', () => {
-        const tooltip = zone.querySelector('.vertex-hover-tooltip');
-        if (tooltip) tooltip.classList.add('visible');
-      });
-      zone.addEventListener('mouseleave', () => {
-        const tooltip = zone.querySelector('.vertex-hover-tooltip');
-        if (tooltip) tooltip.classList.remove('visible');
-      });
-    });
   }
 
   goToScreen(screenNum) {

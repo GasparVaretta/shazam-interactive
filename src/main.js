@@ -13,6 +13,8 @@ import { WorldSpaceAnchorManager } from './anchors/anchors.js';
 import { Nucleo1UI } from './ui/nucleo1.js';
 import { Nucleo2UI } from './ui/nucleo2.js';
 import { Nucleo3UI } from './ui/nucleo3.js';
+import { Nucleo4UI } from './ui/nucleo4.js';
+import { Nucleo5UI } from './ui/nucleo5.js';
 import { AudioManager } from './audio/audio.js';
 
 class ShazamApp {
@@ -32,6 +34,8 @@ class ShazamApp {
     this.nucleo1UI = null;
     this.nucleo2UI = null;
     this.nucleo3UI = null;
+    this.nucleo4UI = null;
+    this.nucleo5UI = null;
 
     // Progression & State Management
     this.maxUnlockedIndex = 0;
@@ -155,6 +159,22 @@ class ShazamApp {
     if (node3ContentEl) {
       await this.nucleo3UI.render(node3ContentEl);
     }
+
+    // Nucleus 4 UI (Actualidad: Records de Shazams)
+    this.nucleo4UI = new Nucleo4UI(
+      () => {
+        console.log('⚡ Nucleus 4 complete → Opening Conclusion');
+        this.showConclusion();
+      },
+      () => {
+        console.log('⚡ Nucleus 4 -> Navigating back to Nucleus 3');
+        this.handleNodeSelection(2);
+      }
+    );
+    const node4ContentEl = document.getElementById('node-content-3');
+    if (node4ContentEl) {
+      await this.nucleo4UI.render(node4ContentEl);
+    }
   }
 
   /**
@@ -205,6 +225,76 @@ class ShazamApp {
         this.conclusionPanel.classList.remove('active');
       });
     }
+  }
+
+  /**
+   * Shows the conclusion modal (Nucleus 5).
+   * Resets camera to overview so the 3D scene is visible behind the modal.
+   */
+  showConclusion() {
+    // Return 3D camera to overview so zoom is cancelled
+    this.cameraSystem.transitionToOverview();
+    this.resetActiveSelection();
+
+    // Show or re-create Nucleo5 overlay
+    if (!this.nucleo5UI) {
+      this.nucleo5UI = new Nucleo5UI(() => this.restartExperience());
+    }
+    this.nucleo5UI.show();
+  }
+
+  /**
+   * Restarts the full experience:
+   * - Destroys the conclusion overlay.
+   * - Resets all progression state.
+   * - Returns camera to start position.
+   * - Shows the start screen again.
+   */
+  restartExperience() {
+    // Destroy conclusion overlay if present
+    if (this.nucleo5UI) {
+      this.nucleo5UI.destroy();
+    }
+
+    // Reset progression
+    this.maxUnlockedIndex = 0;
+    this.visitedNodes.clear();
+    this.isConclusionUnlocked = false;
+    this.activeNodeIndex = -1;
+
+    // Reset anchor & lighting unlock state
+    this.syncUnlockedState();
+
+    // Reset all HUD controllers
+    if (this.nucleo1UI) this.nucleo1UI.resetState();
+    if (this.nucleo2UI) this.nucleo2UI.resetState();
+    if (this.nucleo3UI) this.nucleo3UI.resetState();
+    if (this.nucleo4UI) this.nucleo4UI.resetState();
+
+    // Hide anchors and overview
+    if (this.anchorManager) {
+      this.anchorManager.setActiveNode(-1);
+      this.anchorManager.setHoveredNode(-1);
+    }
+    if (this.overviewUI) {
+      this.overviewUI.classList.add('hidden');
+    }
+
+    // Reset conclusion CTA styling
+    if (this.conclusionCTA) {
+      this.conclusionCTA.classList.add('disabled');
+      this.conclusionCTA.classList.remove('unlocked');
+    }
+
+    // Transition camera back to start / idle position
+    this.cameraSystem.transitionToOverview();
+
+    // Show the start screen again
+    if (this.startScreen) {
+      this.startScreen.classList.remove('hidden');
+    }
+
+    console.log('🔄 Experience restarted.');
   }
 
   /**
@@ -305,6 +395,11 @@ class ShazamApp {
       // Reset Nucleus 3 state to Screen 1 whenever Node 2 is entered
       if (nodeIndex === 2 && this.nucleo3UI) {
         this.nucleo3UI.resetState();
+      }
+
+      // Reset Nucleus 4 state to Screen 1 whenever Node 3 is entered
+      if (nodeIndex === 3 && this.nucleo4UI) {
+        this.nucleo4UI.resetState();
       }
 
       // Unlock next node sequentially (1 -> 2 -> 3 -> 4)
