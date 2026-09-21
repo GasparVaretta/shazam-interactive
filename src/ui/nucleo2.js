@@ -116,11 +116,7 @@ export class Nucleo2UI {
               <!-- Right Component: Cellphone CTA Button (SIGUIENTE) -->
               <div class="n2-cellphone-box">
                 <button id="n2-cellphone-btn" class="cellphone-btn disabled" disabled title="Ingresa la combinación '2580' para continuar">
-                  <svg class="phone-icon-svg" viewBox="0 0 64 64" width="52" height="52">
-                    <path d="M 20 12 C 18 12, 14 16, 14 20 C 14 34, 30 50, 44 50 C 48 50, 52 46, 52 44 L 46 36 C 44 34, 40 34, 38 36 L 34 40 C 26 36, 20 30, 16 22 L 20 18 C 22 16, 22 12, 20 12 Z" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
-                    <line x1="36" y1="28" x2="52" y2="28" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" />
-                    <polyline points="46 21 53 28 46 35" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
+                  <img id="n2-phone-icon-img" src="./references/nucleo_2/phone-icon-off.png" alt="Phone Icon" class="phone-icon-img" />
                 </button>
               </div>
             </div>
@@ -135,15 +131,7 @@ export class Nucleo2UI {
             <div class="n2-loading-layout">
               <!-- Phone Listening Icon Pill (Handset + Ear + Sound Waves) -->
               <div class="phone-listening-pill">
-                <svg viewBox="0 0 64 64" width="52" height="52" class="listening-svg">
-                  <!-- Phone Handset -->
-                  <path d="M 18 14 C 16 14, 12 18, 12 22 C 12 36, 28 52, 42 52 C 46 52, 50 48, 50 46 L 44 38 C 42 36, 38 36, 36 38 L 32 42 C 24 38, 18 32, 14 24 L 18 20 C 20 18, 20 14, 18 14 Z" fill="#000000" />
-                  <!-- Ear Contour -->
-                  <path d="M 38 14 C 42 14, 45 17, 45 21 C 45 25, 41 27, 41 29 C 41 30, 42 31, 44 31" fill="none" stroke="#000000" stroke-width="2.5" stroke-linecap="round" />
-                  <!-- Sound Waves -->
-                  <path d="M 48 15 C 51 18, 51 23, 48 26" fill="none" stroke="#000000" stroke-width="2.5" stroke-linecap="round" />
-                  <path d="M 53 12 C 57 17, 57 26, 53 30" fill="none" stroke="#000000" stroke-width="2.5" stroke-linecap="round" />
-                </svg>
+                <img src="./references/nucleo_2/phone-icon-listening.png" alt="Phone Listening Icon" class="phone-icon-img" />
               </div>
 
               <!-- Circular Ring Loader (30 sec label, 3500ms automatic timer) -->
@@ -163,15 +151,7 @@ export class Nucleo2UI {
             <div class="n2-result-layout">
               <!-- Left: Phone Listening Icon -->
               <div class="phone-listening-pill">
-                <svg viewBox="0 0 64 64" width="48" height="48" class="listening-svg">
-                  <!-- Phone Handset -->
-                  <path d="M 18 14 C 16 14, 12 18, 12 22 C 12 36, 28 52, 42 52 C 46 52, 50 48, 50 46 L 44 38 C 42 36, 38 36, 36 38 L 32 42 C 24 38, 18 32, 14 24 L 18 20 C 20 18, 20 14, 18 14 Z" fill="#000000" />
-                  <!-- Ear Contour -->
-                  <path d="M 38 14 C 42 14, 45 17, 45 21 C 45 25, 41 27, 41 29 C 41 30, 42 31, 44 31" fill="none" stroke="#000000" stroke-width="2.5" stroke-linecap="round" />
-                  <!-- Sound Waves -->
-                  <path d="M 48 15 C 51 18, 51 23, 48 26" fill="none" stroke="#000000" stroke-width="2.5" stroke-linecap="round" />
-                  <path d="M 53 12 C 57 17, 57 26, 53 30" fill="none" stroke="#000000" stroke-width="2.5" stroke-linecap="round" />
-                </svg>
+                <img src="./references/nucleo_2/phone-icon-listening.png" alt="Phone Listening Icon" class="phone-icon-img" />
               </div>
 
               <!-- Center: Text Message SMS Icon + Arrow -->
@@ -295,6 +275,10 @@ export class Nucleo2UI {
         cellphoneBtn.classList.add('disabled');
         cellphoneBtn.disabled = true;
       }
+      const phoneImg = this.container.querySelector('#n2-phone-icon-img');
+      if (phoneImg) {
+        phoneImg.src = './references/nucleo_2/phone-icon-off.png';
+      }
     }
   }
 
@@ -337,6 +321,11 @@ export class Nucleo2UI {
         { scale: 0.88 },
         { scale: 1.1, duration: 0.55, ease: 'back.out(2)', yoyo: true, repeat: 1 }
       );
+    }
+
+    const phoneImg = this.container.querySelector('#n2-phone-icon-img');
+    if (phoneImg) {
+      phoneImg.src = './references/nucleo_2/phone-icon-on.png';
     }
   }
 
@@ -443,6 +432,11 @@ export class Nucleo2UI {
       cellphoneBtn.disabled = true;
       cellphoneBtn.title = "Ingresa la combinación '2580' para continuar";
       gsap.set(cellphoneBtn, { scale: 1 });
+    }
+
+    const phoneImg = this.container.querySelector('#n2-phone-icon-img');
+    if (phoneImg) {
+      phoneImg.src = './references/nucleo_2/phone-icon-off.png';
     }
   }
 }
