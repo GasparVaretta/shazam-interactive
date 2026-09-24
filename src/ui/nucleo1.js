@@ -74,7 +74,7 @@ export class Nucleo1UI {
           <!-- Screen 1 -->
           <div id="n1-screen-1" class="n1-screen active">
             <p class="n1-description">
-              Shazam es una aplicación móvil y un servicio en línea diseñado para identificar en pocos segundos cualquier canción que esté sonando en tu entorno.
+              Shazam es una <span class="highlight-purple">aplicación móvil</span> y un <span class="highlight-purple">servicio en línea</span> diseñado para identificar en pocos segundos cualquier canción que esté sonando en tu entorno.
             </p>
 
             <div class="n1-team-box">

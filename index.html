@@ -962,7 +962,7 @@
       position: relative;
       width: 135px;
       height: 86px;
-      border-radius: 44px;
+      border-radius: 24px 24px 12px 12px;
       border: 1.5px solid rgba(0, 240, 255, 0.25);
       background: rgba(4, 12, 24, 0.45);
       display: flex;
@@ -1084,31 +1084,42 @@
       text-shadow: 0 0 8px rgba(0, 240, 255, 0.7);
     }
 
-    /* Right Side: Feature Phone Outline Illustration */
+    /* Right Side: Feature Phone Outline Illustration — Unified dimensions across all N2 screens */
     .n2-phone-illustration-box {
       position: absolute;
-      right: 24px;
-      top: -15px;
-      width: 175px;
-      height: 285px;
+      right: 30px;
+      top: 0px;
+      width: 190px;
+      height: 310px;
+      overflow: visible;
     }
 
+    /* Chassis-style phone frame: rounded top, flatter base, transparent background and neon borders */
     .phone-outer-frame {
       width: 100%;
       height: 100%;
-      border: 2.5px solid #00f0ff;
-      border-radius: 26px;
-      background: rgba(2, 12, 24, 0.45);
-      box-shadow: 0 0 22px rgba(0, 240, 255, 0.35);
+      border: 2px solid transparent;
+      border-radius: 24px 24px 12px 12px;
+      background:
+        linear-gradient(transparent, transparent) padding-box,
+        linear-gradient(180deg, #00f0ff 0%, rgba(0, 240, 255, 0.3) 60%, transparent 100%) border-box;
+      background-color: transparent;
+      box-shadow:
+        0 0 28px rgba(0, 240, 255, 0.3),
+        0 -6px 20px rgba(0, 240, 255, 0.25) inset;
       padding: 14px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
+      overflow: visible;
+      /* Bottom fade dissolves phone into background */
+      -webkit-mask-image: linear-gradient(to bottom, black 72%, transparent 100%);
+      mask-image: linear-gradient(to bottom, black 72%, transparent 100%);
     }
 
     .phone-screen-display {
       width: 100%;
-      height: 140px;
+      height: 148px;
       border: 2px solid #00f0ff;
       border-radius: 12px;
       background: rgba(2, 12, 24, 0.7);
@@ -1119,7 +1130,7 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 8px;
-      height: 85px;
+      height: 90px;
     }
 
     .phone-key-btn {
@@ -1131,18 +1142,21 @@
 
     /* CSS Variables for Nucleus 2 Pantalla 2 (Carga Completa) Component Customization */
     :root {
-      --n2-p2-phone-width: 215px;
-      --n2-p2-phone-height: 335px;
-      --n2-p2-phone-top: -32px;
-      --n2-p2-phone-right: 20px;
-      --n2-p2-screen-height: 170px;
+      /* Phone dimensions match Pantalla 1 exactly (190x310) for visual continuity */
+      --n2-p2-phone-width: 190px;
+      --n2-p2-phone-height: 310px;
+      --n2-p2-phone-top: 0px;
+      --n2-p2-phone-right: 30px;
+      /* Screen height proportional to unified phone */
+      --n2-p2-screen-height: 148px;
       --n2-p2-left-col-max-width: 58%;
       --n2-p2-left-col-gap: 18px;
-      --n2-p2-bubble-top: 130px;
-      --n2-p2-bubble-left: -65px;
-      --n2-p2-bubble-width: 245px;
-      --n2-p2-bubble-font-size: 0.80rem;
-      --n2-p2-play-btn-size: 52px;
+      /* Bubble: sits just below screen, offset left to overlap keypad area */
+      --n2-p2-bubble-top: 142px;
+      --n2-p2-bubble-left: -58px;
+      --n2-p2-bubble-width: 220px;
+      --n2-p2-bubble-font-size: 0.75rem;
+      --n2-p2-play-btn-size: 46px;
     }
 
     /* Pantalla 2 Estado 2 (Carga Completa) Result Layout */
@@ -1150,16 +1164,16 @@
       position: relative;
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
       width: 100%;
-      min-height: 290px;
+      min-height: 310px;
       padding-top: 5px;
     }
 
     .n2-result-left-col {
       display: flex;
       flex-direction: column;
-      gap: var(--n2-p2-left-col-gap);
+      height: 310px;
       max-width: var(--n2-p2-left-col-max-width);
     }
 
@@ -1168,6 +1182,8 @@
       align-items: center;
       gap: 22px;
       padding-left: 4px;
+      margin-top: auto;
+      margin-bottom: auto;
     }
 
     .n2-sms-arrow-box {
@@ -1188,18 +1204,26 @@
       box-shadow: 0 0 18px rgba(0, 240, 255, 0.45);
     }
 
+    /* Result phone uses the same base class dimensions — no override needed for size */
     .n2-phone-illustration-box.result-phone {
       position: absolute;
       right: var(--n2-p2-phone-right);
       top: var(--n2-p2-phone-top);
       width: var(--n2-p2-phone-width);
       height: var(--n2-p2-phone-height);
+      overflow: visible;
     }
 
+    /* Result phone frame keeps chassis style from base, just adjusts screen height */
     .n2-phone-illustration-box.result-phone .phone-outer-frame {
       height: 100%;
-      border-radius: 28px;
-      padding: 16px;
+      background:
+        linear-gradient(transparent, transparent) padding-box,
+        linear-gradient(180deg, #00f0ff 0%, rgba(0, 240, 255, 0.3) 60%, transparent 100%) border-box;
+      background-color: transparent;
+      overflow: visible;
+      -webkit-mask-image: linear-gradient(to bottom, black 72%, transparent 100%);
+      mask-image: linear-gradient(to bottom, black 72%, transparent 100%);
     }
 
     .n2-phone-illustration-box.result-phone .phone-screen-display.result-screen {
@@ -1213,6 +1237,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      border-radius: 12px;
     }
 
     .phone-screen-display.result-screen .eminem-cover-photo {
@@ -1374,11 +1399,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 40px;
-      padding: 15px 0 25px 0;
+      padding: 10px 0 20px 0;
     }
 
-    /* Celular asset — imagen flotante sin marco, centrada */
+    /* Celular asset — imagen flotante interactiva, desplazada 5% más a la izquierda y 10% más arriba */
     .n3-celular-frame {
       position: relative;
       display: flex;
@@ -1390,6 +1414,9 @@
       box-shadow: none;
       padding: 0;
       overflow: visible;
+      margin-left: -80px;
+      margin-top: -15px;
+      cursor: pointer;
     }
 
     .n3-celular-img {
@@ -1401,6 +1428,15 @@
       border-radius: 0;
       object-fit: contain;
       filter: drop-shadow(0 0 28px rgba(94, 0, 255, 0.5)) drop-shadow(0 0 60px rgba(94, 0, 255, 0.2));
+      cursor: pointer;
+      transition: transform 0.3s ease, filter 0.3s ease;
+      transform-origin: center center;
+    }
+
+    .n3-celular-frame:hover .n3-celular-img,
+    .n3-celular-img:hover {
+      transform: scale(1.1);
+      filter: drop-shadow(0 0 38px rgba(94, 0, 255, 0.8)) drop-shadow(0 0 75px rgba(94, 0, 255, 0.35));
     }
 
     .n3-phone-frame {
@@ -1825,6 +1861,7 @@
       color: #00f0ff;
       box-shadow: 0 0 20px rgba(0, 240, 255, 0.45), 0 4px 18px rgba(0, 0, 0, 0.7);
     }
+
     .graph-tooltip.cyan-theme::after {
       border-top: 6px solid #00f0ff;
     }
@@ -1834,6 +1871,7 @@
       color: #818cf8;
       box-shadow: 0 0 20px rgba(129, 140, 248, 0.45), 0 4px 18px rgba(0, 0, 0, 0.7);
     }
+
     .graph-tooltip.purple-theme::after {
       border-top: 6px solid #818cf8;
     }

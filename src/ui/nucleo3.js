@@ -65,22 +65,10 @@ export class Nucleo3UI {
             </p>
 
             <div class="n3-p1-layout">
-              <!-- celularshazam.png — Asset principal centrado con bordes neon -->
-              <div class="n3-celular-frame" id="n3-p1-phone">
+              <!-- celularshazam.png — Asset principal interactivo -->
+              <div class="n3-celular-frame" id="n3-p1-phone" title="Haz clic en el celular para continuar">
                 <img src="references/nucleo_3/assets_mockups/celularshazam.png" alt="Shazam en celular" class="n3-celular-img" />
               </div>
-            </div>
-
-            <!-- Footer Controls -->
-            <div class="nucleo-card-footer">
-              <div></div>
-              <button id="n3-next-1" class="nucleo-next-btn purple-btn">
-                <span>SIGUIENTE</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                  <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
-              </button>
             </div>
           </div>
 
@@ -341,9 +329,14 @@ export class Nucleo3UI {
   }
 
   bindEvents() {
-    // Screen 1: Next button advances to Screen 2
-    const next1 = this.container.querySelector('#n3-next-1');
-    if (next1) next1.addEventListener('click', (e) => { e.stopPropagation(); this.goToScreen(2); });
+    // Screen 1: Al hacer clic sobre el celular se avanza a la Pantalla 2
+    const phoneP1 = this.container.querySelector('#n3-p1-phone');
+    if (phoneP1) {
+      phoneP1.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.goToScreen(2);
+      });
+    }
 
     const next2 = this.container.querySelector('#n3-next-2');
     if (next2) next2.addEventListener('click', (e) => { e.stopPropagation(); this.goToScreen(3); });

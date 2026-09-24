@@ -56,7 +56,7 @@ export class Nucleo2UI {
                 <path d="M 54 42 L 54 135 L 230 135" fill="none" stroke="#00f0ff" stroke-width="2.5" />
                 <circle cx="230" cy="135" r="4.5" fill="#00f0ff" />
 
-                <!-- Connector 2: Keypad Right Border -> Cellphone CTA Left Border -->
+                <!-- Connector 2: Keypad Right Border -> Cellphone CTA Button Left Border (left: 558px) -->
                 <circle cx="434" cy="135" r="4.5" id="n2-dot-2a" fill="rgba(0, 240, 255, 0.35)" />
                 <path d="M 434 135 L 558 135" fill="none" stroke="rgba(0, 240, 255, 0.35)" stroke-width="2.5" id="n2-line-2-path" />
                 <circle cx="558" cy="135" r="4.5" id="n2-dot-2b" fill="rgba(0, 240, 255, 0.35)" />
@@ -182,11 +182,6 @@ export class Nucleo2UI {
                     </div>
                   </div>
 
-                  <!-- Speech Bubble Result Pill -->
-                  <div class="n2-song-bubble-pill">
-                    Tu cancion es: <span class="purple-song-title">“Cleanin' out my closet”</span> de Eminem
-                  </div>
-
                   <!-- Phone Keypad Grid -->
                   <div class="phone-keypad-grid">
                     <div class="phone-key-btn"></div>
@@ -196,6 +191,11 @@ export class Nucleo2UI {
                     <div class="phone-key-btn"></div>
                     <div class="phone-key-btn"></div>
                   </div>
+                </div>
+
+                <!-- Speech Bubble Result Pill (placed outside masked frame so it never gets clipped) -->
+                <div class="n2-song-bubble-pill">
+                  Tu cancion es: <span class="purple-song-title">“Cleanin' out my closet”</span> de Eminem
                 </div>
               </div>
             </div>
@@ -210,7 +210,7 @@ export class Nucleo2UI {
                 <span>ANTERIOR</span>
               </button>
               <button id="n2-final-next-btn" class="nucleo-next-btn">
-                <span>SIGUIENTE</span>
+                <span>ACTUALIDAD</span>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                   <polyline points="12 5 19 12 12 19"></polyline>
