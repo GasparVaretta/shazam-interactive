@@ -15,6 +15,7 @@ import { Nucleo2UI } from './ui/nucleo2.js';
 import { Nucleo3UI } from './ui/nucleo3.js';
 import { Nucleo4UI } from './ui/nucleo4.js';
 import { Nucleo5UI } from './ui/nucleo5.js';
+import { GlobalHUD } from './ui/globalHUD.js';
 import { AudioManager } from './audio/audio.js';
 
 class ShazamApp {
@@ -25,6 +26,7 @@ class ShazamApp {
     this.lightningSystem = null;
     this.interactionManager = null;
     this.anchorManager = null;
+    this.globalHUD = null;
     this.audioManager = new AudioManager();
 
     this.clock = new THREE.Clock();
@@ -41,6 +43,7 @@ class ShazamApp {
     this.maxUnlockedIndex = 0;
     this.visitedNodes = new Set();
     this.isConclusionUnlocked = false;
+    this.isExperienceCompleted = false;
 
     // DOM UI Anchors
     this.startScreen = document.getElementById('startScreen');
@@ -87,7 +90,15 @@ class ShazamApp {
       this.lightningSystem.getNodeOrbGroups()
     );
 
-    // 6. Initialize HUD Controllers for Nucleus 1, 2, and 3
+    // 6. Initialize Global Persistent HUD (Top-Left Shazam Navigator)
+    this.globalHUD = new GlobalHUD(
+      () => this.getNucleus1Title(),
+      (nodeIdx) => this.handleNodeSelection(nodeIdx)
+    );
+    this.globalHUD.init();
+    this.globalHUD.hide();
+
+    // 7. Initialize HUD Controllers for Nucleus 1, 2, and 3
     this.initHUDControllers();
 
     // 7. Apply initial progressive unlock state
@@ -131,32 +142,40 @@ class ShazamApp {
     }
 
     // Nucleus 2 UI (¿Cómo funcionaba?)
-    this.nucleo2UI = new Nucleo2UI(() => {
-      console.log('⚡ Nucleus 2 complete -> Navigating to Nucleus 3 (if unlocked)');
-      if (this.maxUnlockedIndex >= 2) {
-        this.handleNodeSelection(2);
-      } else {
-        this.cameraSystem.transitionToOverview();
-        this.resetActiveSelection();
-      }
-    });
+    this.nucleo2UI = new Nucleo2UI(
+      () => {
+        console.log('⚡ Nucleus 2 complete -> Navigating to Nucleus 3 (if unlocked)');
+        if (this.audioManager) this.audioManager.cleanupNucleo2Audio();
+        if (this.maxUnlockedIndex >= 2) {
+          this.handleNodeSelection(2);
+        } else {
+          this.cameraSystem.transitionToOverview();
+          this.resetActiveSelection();
+        }
+      },
+      this.audioManager
+    );
     const node2ContentEl = document.getElementById('node-content-1');
     if (node2ContentEl) {
       await this.nucleo2UI.render(node2ContentEl);
     }
 
     // Nucleus 3 UI (Evolución / Actualidad)
-    this.nucleo3UI = new Nucleo3UI(() => {
-      console.log('⚡ Nucleus 3 complete -> Navigating to Nucleus 4 (if unlocked)');
-      if (this.maxUnlockedIndex >= 3) {
-        this.handleNodeSelection(3);
-      } else {
-        this.cameraSystem.transitionToOverview();
-        this.resetActiveSelection();
-      }
-    });
+    this.nucleo3UI = new Nucleo3UI(
+      () => {
+        console.log('⚡ Nucleus 3 complete -> Navigating to Nucleus 4 (if unlocked)');
+        if (this.audioManager) this.audioManager.cleanupNucleo3Audio();
+        if (this.maxUnlockedIndex >= 3) {
+          this.handleNodeSelection(3);
+        } else {
+          this.cameraSystem.transitionToOverview();
+          this.resetActiveSelection();
+        }
+      },
+      this.audioManager
+    );
     const node3ContentEl = document.getElementById('node-content-2');
-    if (node3ContentEl) {
+    if (node3ContentEl && this.nucleo3UI) {
       await this.nucleo3UI.render(node3ContentEl);
     }
 
@@ -201,6 +220,9 @@ class ShazamApp {
         if (this.overviewUI) {
           this.overviewUI.classList.remove('hidden');
         }
+        if (this.globalHUD) {
+          this.globalHUD.show();
+        }
         this.cameraSystem.transitionToOverview();
       });
     }
@@ -236,65 +258,63 @@ class ShazamApp {
     this.cameraSystem.transitionToOverview();
     this.resetActiveSelection();
 
-    // Show or re-create Nucleo5 overlay
-    if (!this.nucleo5UI) {
-      this.nucleo5UI = new Nucleo5UI(() => this.restartExperience());
+    // Re-create Nucleo5 overlay with finalization and dynamic title callbacks
+    if (this.nucleo5UI) {
+      this.nucleo5UI.destroy();
     }
+    this.nucleo5UI = new Nucleo5UI(
+      () => this.handleFinalize(),
+      () => this.getNucleus1Title()
+    );
     this.nucleo5UI.show();
   }
 
   /**
-   * Restarts the full experience:
-   * - Destroys the conclusion overlay.
-   * - Resets all progression state.
-   * - Returns camera to start position.
-   * - Shows the start screen again.
+   * Called when user clicks FINALIZAR in Conclusiones (Pantalla 2):
+   * - Marks experience as completed (`isExperienceCompleted = true`).
+   * - Unlocks all 4 nuclei (`maxUnlockedIndex = 3`).
+   * - Updates Node 1 title permanently to "¿QUE ES SHAZAM?".
+   * - Returns camera to Overview preserving all progression.
    */
-  restartExperience() {
+  handleFinalize() {
+    console.log('⚡ Experience completed! Finalizing and returning to Overview with full progress preserved.');
+    this.isExperienceCompleted = true;
+
     // Destroy conclusion overlay if present
     if (this.nucleo5UI) {
       this.nucleo5UI.destroy();
+      this.nucleo5UI = null;
     }
 
-    // Reset progression
-    this.maxUnlockedIndex = 0;
-    this.visitedNodes.clear();
-    this.isConclusionUnlocked = false;
-    this.activeNodeIndex = -1;
+    // Unlock all 4 nuclei persistently
+    this.maxUnlockedIndex = 3;
 
-    // Reset anchor & lighting unlock state
+    // Update Node 1 title to "¿QUE ES SHAZAM?"
+    this.updateNucleus1Title();
+
+    // Sync unlocked state across scene, anchors, raycaster & buttons
     this.syncUnlockedState();
 
-    // Reset all HUD controllers
-    if (this.nucleo1UI) this.nucleo1UI.resetState();
-    if (this.nucleo2UI) this.nucleo2UI.resetState();
-    if (this.nucleo3UI) this.nucleo3UI.resetState();
-    if (this.nucleo4UI) this.nucleo4UI.resetState();
-
-    // Hide anchors and overview
-    if (this.anchorManager) {
-      this.anchorManager.setActiveNode(-1);
-      this.anchorManager.setHoveredNode(-1);
-    }
-    if (this.overviewUI) {
-      this.overviewUI.classList.add('hidden');
-    }
-
-    // Reset conclusion CTA styling
-    if (this.conclusionCTA) {
-      this.conclusionCTA.classList.add('disabled');
-      this.conclusionCTA.classList.remove('unlocked');
-    }
-
-    // Transition camera back to start / idle position
+    // Transition camera to Overview and show Overview UI
     this.cameraSystem.transitionToOverview();
+    this.resetActiveSelection();
+  }
 
-    // Show the start screen again
-    if (this.startScreen) {
-      this.startScreen.classList.remove('hidden');
+  getNucleus1Title() {
+    return this.isExperienceCompleted ? '¿QUE ES SHAZAM?' : 'ORÍGENES';
+  }
+
+  updateNucleus1Title() {
+    const titleText = this.getNucleus1Title();
+    // Update Overview node 0 button text
+    const btn0Text = document.querySelector('#overviewNode0Btn .btn-text');
+    if (btn0Text) {
+      btn0Text.textContent = titleText;
     }
-
-    console.log('🔄 Experience restarted.');
+    // Update anchor 0 title
+    if (this.anchorManager) {
+      this.anchorManager.updateNodeTitle(0, titleText);
+    }
   }
 
   /**
@@ -303,6 +323,13 @@ class ShazamApp {
    */
   resetActiveSelection() {
     this.activeNodeIndex = -1;
+    if (this.audioManager) {
+      this.audioManager.cleanupNucleo2Audio();
+      this.audioManager.cleanupNucleo3Audio();
+    }
+    if (this.interactionManager) {
+      this.interactionManager.setSelectedNodeIndex(-1);
+    }
     this.syncUnlockedState();
     if (this.anchorManager) {
       this.anchorManager.setActiveNode(-1);
@@ -348,6 +375,9 @@ class ShazamApp {
     if (this.interactionManager) {
       this.interactionManager.setMaxUnlockedIndex(this.maxUnlockedIndex);
     }
+    if (this.globalHUD) {
+      this.globalHUD.updateUnlockedState(this.maxUnlockedIndex);
+    }
 
     // Apply Purple styling to overview buttons for Node 3 and Node 4 when unlocked
     const btn2 = document.getElementById('overviewNode2Btn');
@@ -358,12 +388,18 @@ class ShazamApp {
     if (btn3 && this.maxUnlockedIndex >= 3) {
       btn3.classList.add('purple-node-btn');
     }
+
+    // Ensure Nucleus 1 title matches current completion state
+    this.updateNucleus1Title();
   }
 
   handleNodeSelection(nodeIndex) {
     if (nodeIndex <= this.maxUnlockedIndex) {
       console.log(`Navigating to 3D Node [${nodeIndex + 1}]`);
       this.activeNodeIndex = nodeIndex;
+      if (this.interactionManager) {
+        this.interactionManager.setSelectedNodeIndex(nodeIndex);
+      }
       this.visitedNodes.add(nodeIndex);
 
       // Play Node transition sound effect

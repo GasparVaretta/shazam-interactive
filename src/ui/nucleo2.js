@@ -8,50 +8,22 @@
 import gsap from 'gsap';
 
 export class Nucleo2UI {
-  constructor(onCompleteCallback) {
+  constructor(onCompleteCallback, audioManager = null) {
     this.onCompleteCallback = onCompleteCallback;
+    this.audioManager = audioManager;
     this.container = null;
     this.enteredSequence = [];
     this.isResolvedP1 = false;
     this.currentScreen = 1; // 1: Pantalla 1, 2: Pantalla 2 Carga, 3: Pantalla 2 Carga Completa
     this.loadingTimer = null;
-    this.eminemAlbumDataUrl = null;
+    this.eminemAlbumDataUrl = 'references/nucleo_2/eminem_cover.jpg';
   }
 
   /**
-   * Crops Eminem album cover from nucleo2_pantalla2_carga_completa.png via HTML5 Canvas
+   * Returns high-resolution Eminem album cover asset path
    */
   async loadEminemAlbumPhoto() {
-    if (this.eminemAlbumDataUrl) return this.eminemAlbumDataUrl;
-
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'Anonymous';
-      img.src = 'references/nucleo_2/pantallas/nucleo2_pantalla2_carga_completa.png';
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const scaleX = img.naturalWidth / 1920;
-        const scaleY = img.naturalHeight / 1080;
-
-        // Bounding box for Eminem album cover inside mockup
-        const cropX = 1420 * scaleX;
-        const cropY = 388 * scaleY;
-        const cropW = 280 * scaleX;
-        const cropH = 280 * scaleY;
-
-        canvas.width = cropW;
-        canvas.height = cropH;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
-
-        this.eminemAlbumDataUrl = canvas.toDataURL('image/png');
-        resolve(this.eminemAlbumDataUrl);
-      };
-      img.onerror = () => {
-        console.warn('Could not load nucleo2_pantalla2_carga_completa.png for cropping');
-        resolve('references/nucleo_2/pantallas/nucleo2_pantalla2_carga_completa.png');
-      };
-    });
+    return 'references/nucleo_2/eminem_cover.jpg';
   }
 
   async render(targetEl) {
@@ -77,17 +49,17 @@ export class Nucleo2UI {
             </p>
 
             <div class="n2-interactive-layout">
-              <!-- Overlay SVG for Precise Component-to-Component Connectors (Circles sitting BELOW title & anchored) -->
-              <svg class="n2-overlay-svg" viewBox="0 0 800 260">
-                <!-- Connector 1: Circle sitting BELOW "Marcar 2580" title -> Keypad Mid-Left Border -->
-                <circle cx="85" cy="48" r="4.5" fill="#00f0ff" />
-                <path d="M 85 48 L 85 130 L 245 130" fill="none" stroke="#00f0ff" stroke-width="2.5" />
-                <circle cx="245" cy="130" r="4.5" fill="#00f0ff" />
+              <!-- Overlay SVG for Precise Component-to-Component Connectors -->
+              <svg class="n2-overlay-svg" viewBox="0 0 800 270">
+                <!-- Connector 1: Dot sitting below "Marcar 2580" -> Keypad Left Border -->
+                <circle cx="54" cy="42" r="4.5" fill="#00f0ff" />
+                <path d="M 54 42 L 54 135 L 230 135" fill="none" stroke="#00f0ff" stroke-width="2.5" />
+                <circle cx="230" cy="135" r="4.5" fill="#00f0ff" />
 
-                <!-- Connector 2: Keypad Mid-Right Border -> Cellphone CTA Outer Border -->
-                <circle cx="505" cy="130" r="4.5" id="n2-dot-2a" fill="rgba(0, 240, 255, 0.35)" />
-                <path d="M 505 130 L 585 130 L 585 175 L 638 175" fill="none" stroke="rgba(0, 240, 255, 0.35)" stroke-width="2.5" id="n2-line-2-path" />
-                <circle cx="638" cy="175" r="4.5" id="n2-dot-2b" fill="rgba(0, 240, 255, 0.35)" />
+                <!-- Connector 2: Keypad Right Border -> Cellphone CTA Left Border -->
+                <circle cx="434" cy="135" r="4.5" id="n2-dot-2a" fill="rgba(0, 240, 255, 0.35)" />
+                <path d="M 434 135 L 558 135" fill="none" stroke="rgba(0, 240, 255, 0.35)" stroke-width="2.5" id="n2-line-2-path" />
+                <circle cx="558" cy="135" r="4.5" id="n2-dot-2b" fill="rgba(0, 240, 255, 0.35)" />
               </svg>
 
               <!-- Left Component: Instruction Title -->
@@ -124,60 +96,106 @@ export class Nucleo2UI {
 
           <!-- PANTALLA 2 — ESTADO 1: Carga (3.5 Segundos / 3500ms) -->
           <div id="n2-screen-2-carga" class="n2-screen" style="display: none;">
-            <p class="n2-description">
-              El teléfono al reconocer la música de fondo te enviaba el resultado en formato de mensaje de texto, que contenía el título de la canción y su autor
-            </p>
-
             <div class="n2-loading-layout">
-              <!-- Phone Listening Icon Pill (Handset + Ear + Sound Waves) -->
-              <div class="phone-listening-pill">
-                <img src="./references/nucleo_2/phone-icon-listening.png" alt="Phone Listening Icon" class="phone-icon-img" />
+              <!-- Left Column: Description + Loading Indicators -->
+              <div class="n2-loading-left-col">
+                <p class="n2-description">
+                  El teléfono <span class="highlight-purple">al reconocer la música de fondo</span> te enviaba el resultado en formato de mensaje de texto, que contenía <span class="highlight-purple">el título de la canción y su autor</span>
+                </p>
+
+                <div class="n2-loading-indicators">
+                  <!-- Phone Listening Icon Pill (Handset + Ear + Sound Waves) -->
+                  <div class="phone-listening-pill">
+                    <img src="./references/nucleo_2/phone-icon-listening.png" alt="Phone Listening Icon" class="phone-icon-img" />
+                  </div>
+
+                  <!-- Circular Ring Loader (30 sec label, 3500ms automatic timer) -->
+                  <div class="ring-loader-box">
+                    <div class="ring-loader-spinner"></div>
+                    <span class="ring-loader-text">30 sec</span>
+                  </div>
+                </div>
               </div>
 
-              <!-- Circular Ring Loader (30 sec label, 3500ms automatic timer) -->
-              <div class="ring-loader-box">
-                <div class="ring-loader-spinner"></div>
-                <span class="ring-loader-text">30 sec</span>
+              <!-- Right Column: Feature Phone Outline Illustration -->
+              <div class="n2-phone-illustration-box">
+                <div class="phone-outer-frame">
+                  <div class="phone-screen-display"></div>
+                  <div class="phone-keypad-grid">
+                    <div class="phone-key-btn"></div>
+                    <div class="phone-key-btn"></div>
+                    <div class="phone-key-btn"></div>
+                    <div class="phone-key-btn"></div>
+                    <div class="phone-key-btn"></div>
+                    <div class="phone-key-btn"></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
           <!-- PANTALLA 2 — ESTADO 2: Carga Completa (Resultado Final) -->
           <div id="n2-screen-2-completa" class="n2-screen" style="display: none;">
-            <p class="n2-description">
-              El teléfono al reconocer la música de fondo te enviaba el resultado en formato de mensaje de texto, que contenía el título de la canción y su autor
-            </p>
-
             <div class="n2-result-layout">
-              <!-- Left: Phone Listening Icon -->
-              <div class="phone-listening-pill">
-                <img src="./references/nucleo_2/phone-icon-listening.png" alt="Phone Listening Icon" class="phone-icon-img" />
+              <!-- Left Column: Description Text + Listening Pill + SMS Bubble + Arrow -->
+              <div class="n2-loading-left-col n2-result-left-col">
+                <p class="n2-description">
+                  El teléfono <span class="highlight-purple">al reconocer la música de fondo</span> te enviaba el resultado en formato de mensaje de texto, que contenía <span class="highlight-purple">el título de la canción y su autor</span>
+                </p>
+
+                <div class="n2-result-center-group">
+                  <!-- Phone Listening Pill -->
+                  <div class="phone-listening-pill">
+                    <img src="./references/nucleo_2/phone-icon-listening.png" alt="Phone Listening Icon" class="phone-icon-img" />
+                  </div>
+
+                  <!-- Text Message SMS Icon Box + Arrow -->
+                  <div class="n2-sms-arrow-box">
+                    <div class="sms-icon-box">
+                      <svg viewBox="0 0 48 48" width="36" height="36">
+                        <path d="M 8 10 C 5.8 10, 4 11.8, 4 14 L 4 30 C 4 32.2, 5.8 34, 8 34 L 14 34 L 14 41 L 21 34 L 40 34 C 42.2 34, 44 32.2, 44 30 L 44 14 C 44 11.8, 42.2 10, 40 10 Z" fill="none" stroke="#00f0ff" stroke-width="2.5" stroke-linejoin="round" />
+                        <circle cx="16" cy="22" r="2.2" fill="#00f0ff" />
+                        <circle cx="24" cy="22" r="2.2" fill="#00f0ff" />
+                        <circle cx="32" cy="22" r="2.2" fill="#00f0ff" />
+                      </svg>
+                    </div>
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#00f0ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </div>
+                </div>
               </div>
 
-              <!-- Center: Text Message SMS Icon + Arrow -->
-              <div class="n2-sms-arrow-box">
-                <div class="sms-icon-box">
-                  <svg viewBox="0 0 48 48" width="38" height="38">
-                    <path d="M 8 10 C 5.8 10, 4 11.8, 4 14 L 4 30 C 4 32.2, 5.8 34, 8 34 L 14 34 L 14 41 L 21 34 L 40 34 C 42.2 34, 44 32.2, 44 30 L 44 14 C 44 11.8, 42.2 10, 40 10 Z" fill="none" stroke="#00f0ff" stroke-width="2.5" stroke-linejoin="round" />
-                    <circle cx="16" cy="22" r="2.2" fill="#00f0ff" />
-                    <circle cx="24" cy="22" r="2.2" fill="#00f0ff" />
-                    <circle cx="32" cy="22" r="2.2" fill="#00f0ff" />
-                  </svg>
-                </div>
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00f0ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                  <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
-              </div>
+              <!-- Right Column: Feature Phone Outline with Screen, Eminem Album, Hover Overlay & Result Speech Bubble -->
+              <div class="n2-phone-illustration-box result-phone">
+                <div class="phone-outer-frame">
+                  <!-- Phone Screen Display with Album & Hover Overlay -->
+                  <div class="phone-screen-display result-screen" id="eminemScreenContainer">
+                    <img id="eminemAlbumImg" src="${albumSrc}" class="eminem-cover-photo" alt="Eminem - Cleanin' Out My Closet" />
+                    <div class="eminem-hover-overlay">
+                      <button id="eminemPlayBtn" class="eminem-play-btn" title="Reproducir muestra de audio">
+                        <svg id="eminemPlayIcon" width="24" height="24" viewBox="0 0 24 24" fill="#000000">
+                          <polygon points="7 4 19 12 7 20 7 4"></polygon>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
 
-              <!-- Right: Album Cover & Song Details -->
-              <div class="n2-song-card-box">
-                <div class="eminem-album-frame">
-                  <img id="eminemAlbumImg" src="${albumSrc}" class="eminem-cover-photo" alt="Eminem - Cleanin' Out My Closet" />
-                </div>
-                <div class="song-details-text">
-                  <div class="song-title-line">Tu cancion es: “Cleanin' out my closet” de Eminem</div>
-                  <div class="shazam-count-line">1000 Shazams (2002)</div>
+                  <!-- Speech Bubble Result Pill -->
+                  <div class="n2-song-bubble-pill">
+                    Tu cancion es: <span class="purple-song-title">“Cleanin' out my closet”</span> de Eminem
+                  </div>
+
+                  <!-- Phone Keypad Grid -->
+                  <div class="phone-keypad-grid">
+                    <div class="phone-key-btn"></div>
+                    <div class="phone-key-btn"></div>
+                    <div class="phone-key-btn"></div>
+                    <div class="phone-key-btn"></div>
+                    <div class="phone-key-btn"></div>
+                    <div class="phone-key-btn"></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -229,11 +247,54 @@ export class Nucleo2UI {
       });
     }
 
+    // Eminem song playback toggle & hover play icon
+    const screenContainer = this.container.querySelector('#eminemScreenContainer');
+    const playBtn = this.container.querySelector('#eminemPlayBtn');
+    const playIcon = this.container.querySelector('#eminemPlayIcon');
+    const albumImg = this.container.querySelector('#eminemAlbumImg');
+    const hoverOverlay = this.container.querySelector('.eminem-hover-overlay');
+
+    const handlePlayToggle = (e) => {
+      e.stopPropagation();
+      console.log('🎤 Eminem song component clicked! audioManager:', this.audioManager);
+      if (this.audioManager) {
+        this.audioManager.toggleEminemAudio();
+      } else {
+        console.warn('⚠️ audioManager is not set on Nucleo2UI!');
+      }
+    };
+
+    if (screenContainer) screenContainer.addEventListener('click', handlePlayToggle);
+    if (playBtn) playBtn.addEventListener('click', handlePlayToggle);
+    if (albumImg) albumImg.addEventListener('click', handlePlayToggle);
+    if (hoverOverlay) hoverOverlay.addEventListener('click', handlePlayToggle);
+
+    // Sync state changes from AudioManager to play button icon & visual playing state
+    if (this.audioManager) {
+      this.audioManager.onEminemStateChange = (isPlaying) => {
+        if (playIcon) {
+          if (isPlaying) {
+            playIcon.innerHTML = '<rect x="6" y="4" width="4" height="16" fill="#000000"/><rect x="14" y="4" width="4" height="16" fill="#000000"/>';
+          } else {
+            playIcon.innerHTML = '<polygon points="7 4 19 12 7 20 7 4" fill="#000000"></polygon>';
+          }
+        }
+        if (screenContainer) {
+          if (isPlaying) {
+            screenContainer.classList.add('playing-audio');
+          } else {
+            screenContainer.classList.remove('playing-audio');
+          }
+        }
+      };
+    }
+
     // Previous Button in Pantalla 2 Estado 2
     const prevBtn = this.container.querySelector('#n2-prev-btn');
     if (prevBtn) {
       prevBtn.addEventListener('click', (e) => {
         e.stopPropagation();
+        if (this.audioManager) this.audioManager.cleanupNucleo2Audio();
         this.resetState();
       });
     }
@@ -243,6 +304,7 @@ export class Nucleo2UI {
     if (finalNextBtn) {
       finalNextBtn.addEventListener('click', (e) => {
         e.stopPropagation();
+        if (this.audioManager) this.audioManager.cleanupNucleo2Audio();
         if (this.onCompleteCallback) {
           console.log('⚡ Nucleus 2 Complete -> Triggering transition');
           this.onCompleteCallback();

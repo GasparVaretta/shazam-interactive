@@ -95,6 +95,18 @@ export class WorldSpaceAnchorManager {
     });
   }
 
+  updateNodeTitle(index, newTitle) {
+    if (this.nodes[index]) {
+      this.nodes[index].title = newTitle;
+    }
+    if (this.anchorElements[index]) {
+      const titleEl = this.anchorElements[index].querySelector('.node-title');
+      if (titleEl) {
+        titleEl.textContent = newTitle;
+      }
+    }
+  }
+
   /**
    * Projects 3D node position onto 2D screen space on every frame tick.
    */

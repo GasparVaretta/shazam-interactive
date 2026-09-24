@@ -111,8 +111,33 @@ export class InteractionManager {
     }
   }
 
+  setSelectedNodeIndex(index) {
+    this.selectedNodeIndex = index;
+    this.nodeOrbGroups.forEach((g, idx) => {
+      if (idx === index) {
+        g.userData.targetScale = 1.5;
+      } else if (idx <= this.maxUnlockedIndex) {
+        g.userData.targetScale = 0.85;
+      } else {
+        g.userData.targetScale = 0.75;
+      }
+    });
+  }
+
   onPointerClick(event) {
-    if (event.target.tagName === 'BUTTON' || event.target.closest('.ui-control')) {
+    // Ignore clicks inside interactive UI cards, buttons, or controls
+    if (
+      event.target.tagName === 'BUTTON' ||
+      event.target.closest('.ui-control') ||
+      event.target.closest('.node-card') ||
+      event.target.closest('.nucleo-panel') ||
+      event.target.closest('.infographic-card') ||
+      event.target.closest('.nucleo-container') ||
+      event.target.closest('#shazam-global-navigator') ||
+      event.target.closest('#startScreen') ||
+      event.target.closest('#conclusionModal') ||
+      event.target.closest('#conclusionPanel')
+    ) {
       return;
     }
 
@@ -133,6 +158,7 @@ export class InteractionManager {
         this.onNodeSelectCallback(this.selectedNodeIndex);
       }
     } else {
+      // Clicked on background space outside node screen panels
       if (this.selectedNodeIndex !== -1) {
         this.selectedNodeIndex = -1;
         

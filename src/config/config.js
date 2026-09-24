@@ -3,6 +3,8 @@
  * Master parameters for Canonical S, Lightning, Camera, Nodes, Frame & Post-Processing.
  */
 
+import * as THREE from 'three';
+
 export const CONFIG = {
   // Global Scene Scale parameter - compact size (~35-40% viewport width)
   sceneScale: 0.55,
@@ -52,8 +54,9 @@ export const CONFIG = {
       title: '01. AUDIO FINGERPRINTING',
       subtitle: 'Acoustic Landmarks & Time-Frequency Peaks',
       pathT: 0.0,
-      cameraOffset: { x: -0.4, y: 0.2, z: 4.5 },
-      focusTargetOffset: { x: -1.2, y: -1.2, z: 0.2 },
+      overridePos: new THREE.Vector3(-0.75, -1.70, 0.2),
+      cameraOffset: { x: 0.0, y: 0.0, z: 4.5 },
+      focusTargetOffset: { x: 0.0, y: 0.0, z: 0.0 },
       unlocked: true,
     },
     {
@@ -61,9 +64,10 @@ export const CONFIG = {
       index: 1,
       title: '02. SPECTROGRAM HASHING',
       subtitle: 'Combinatorial Hash Pairs & Peak Extraction',
-      pathT: 0.33,
-      cameraOffset: { x: 0.4, y: -0.15, z: 4.5 },
-      focusTargetOffset: { x: 1.2, y: -0.7, z: 0.1 },
+      pathT: 0.30,
+      overridePos: new THREE.Vector3(0.20, 0.76, 0.2),
+      cameraOffset: { x: 0.0, y: 0.0, z: 4.5 },
+      focusTargetOffset: { x: 0.0, y: 0.0, z: 0.0 },
       unlocked: false,
     },
     {
@@ -71,9 +75,10 @@ export const CONFIG = {
       index: 2,
       title: '03. DATABASE MATCHING',
       subtitle: 'Sub-Second Inverted Index Search',
-      pathT: 0.67,
-      cameraOffset: { x: -0.4, y: 0.15, z: 4.5 },
-      focusTargetOffset: { x: -1.0, y: 0.8, z: 0.1 },
+      pathT: 0.70,
+      overridePos: new THREE.Vector3(0.20, -0.47, 0.2),
+      cameraOffset: { x: 0.0, y: 0.0, z: 4.5 },
+      focusTargetOffset: { x: 0.0, y: 0.0, z: 0.0 },
       unlocked: false,
     },
     {
@@ -82,8 +87,9 @@ export const CONFIG = {
       title: '04. GLOBAL SCALE & EVOLUTION',
       subtitle: 'Over 100 Billion Shazam Identifications',
       pathT: 1.0,
-      cameraOffset: { x: 0.4, y: 0.2, z: 4.5 },
-      focusTargetOffset: { x: 1.0, y: 1.2, z: 0.2 },
+      overridePos: new THREE.Vector3(1.05, 2.05, 0.2),
+      cameraOffset: { x: 0.0, y: 0.0, z: 4.5 },
+      focusTargetOffset: { x: 0.0, y: 0.0, z: 0.0 },
       unlocked: false,
     },
   ],

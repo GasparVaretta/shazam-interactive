@@ -844,20 +844,23 @@
     }
 
     .n2-description {
-      font-size: 1.18rem;
-      line-height: 1.7;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.05rem;
+      line-height: 1.75;
       color: #00e5ff;
-      margin-bottom: 26px;
+      margin-bottom: 22px;
+    }
+
+    .n2-description .highlight-purple {
+      color: #b545ff;
+      font-weight: 700;
     }
 
     .n2-interactive-layout {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-      margin-top: 24px;
       position: relative;
-      height: 260px;
+      width: 100%;
+      height: 270px;
+      margin-top: 18px;
     }
 
     /* Overlay SVG Layer for Component-to-Component Connectors */
@@ -873,49 +876,48 @@
     }
 
     .n2-instruction-box {
-      position: relative;
-      width: 200px;
-      height: 240px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
+      position: absolute;
+      left: 20px;
+      top: 10px;
+      width: 180px;
       z-index: 2;
     }
 
     .n2-instruction-title {
       font-family: 'Roboto Mono', monospace;
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       font-weight: 700;
       color: #00f0ff;
       letter-spacing: 0.04em;
-      padding-top: 10px;
     }
 
     .n2-keypad-box {
-      position: relative;
+      position: absolute;
+      left: 230px;
+      top: 0px;
       border: 2px solid #00f0ff;
-      border-radius: 16px;
-      background: rgba(2, 16, 32, 0.75);
-      padding: 16px;
-      box-shadow: 0 0 25px rgba(0, 240, 255, 0.35);
+      border-radius: 14px;
+      background: rgba(2, 14, 28, 0.8);
+      padding: 14px;
+      box-shadow: 0 0 22px rgba(0, 240, 255, 0.35);
       z-index: 2;
     }
 
     .keypad-grid {
       display: grid;
-      grid-template-columns: repeat(3, 56px);
-      gap: 12px;
+      grid-template-columns: repeat(3, 52px);
+      gap: 10px;
     }
 
     .keypad-btn {
-      width: 56px;
-      height: 56px;
+      width: 52px;
+      height: 52px;
       border: 1.5px solid #00f0ff;
-      border-radius: 12px;
+      border-radius: 10px;
       background: rgba(4, 16, 32, 0.85);
       color: #ffffff;
       font-family: 'Roboto Mono', monospace;
-      font-size: 1.3rem;
+      font-size: 1.25rem;
       font-weight: 700;
       cursor: pointer;
       outline: none;
@@ -923,51 +925,46 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: inset 0 0 8px rgba(0, 240, 255, 0.2);
+      box-shadow: inset 0 0 6px rgba(0, 240, 255, 0.2);
     }
 
     .keypad-btn:hover {
       background: rgba(8, 28, 52, 0.95);
       border-color: #ffffff;
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
-      transform: scale(1.06);
+      box-shadow: 0 0 14px rgba(0, 240, 255, 0.6);
+      transform: scale(1.05);
     }
 
-    /* Pressed key visual feedback (cyan fill) */
+    /* Pressed key visual feedback */
     .keypad-btn.selected-key {
       border-color: #00f0ff;
       background: rgba(0, 240, 255, 0.25);
       box-shadow: 0 0 12px rgba(0, 240, 255, 0.5);
     }
 
-    /* Resolved state active keys (bright cyan fill, black text) */
+    /* Resolved state active keys */
     .keypad-btn.active {
-      background: #00f0ff !important;
-      color: #000000 !important;
+      background: rgba(0, 240, 255, 0.25) !important;
+      color: #ffffff !important;
       border-color: #00f0ff !important;
       font-weight: 800 !important;
-      box-shadow: 0 0 22px #00f0ff, inset 0 0 10px #ffffff !important;
+      box-shadow: 0 0 14px rgba(0, 240, 255, 0.6) !important;
     }
 
     .n2-cellphone-box {
-      position: relative;
-      width: 180px;
-      height: 240px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: flex-end;
-      padding-bottom: 10px;
+      position: absolute;
+      left: 558px;
+      top: 92px;
       z-index: 2;
     }
 
     .cellphone-btn {
       position: relative;
-      width: 140px;
-      height: 95px;
+      width: 135px;
+      height: 86px;
       border-radius: 44px;
-      border: 2px solid rgba(0, 240, 255, 0.3);
+      border: 1.5px solid rgba(0, 240, 255, 0.25);
       background: rgba(4, 12, 24, 0.45);
-      color: rgba(0, 240, 255, 0.35);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -980,17 +977,18 @@
       cursor: not-allowed;
       pointer-events: none;
       opacity: 0.45;
+      border-color: rgba(0, 240, 255, 0.25);
+      background: rgba(4, 12, 24, 0.45);
+      box-shadow: none;
     }
 
     .cellphone-btn.enabled {
       border-color: #00f0ff;
       background: rgba(8, 24, 44, 0.95);
-      color: #00f0ff;
-      box-shadow: 0 0 35px rgba(0, 240, 255, 0.7);
+      box-shadow: 0 0 30px rgba(0, 240, 255, 0.6);
       cursor: pointer;
       pointer-events: auto;
       opacity: 1;
-      animation: pulsePhone 2s infinite ease-in-out;
     }
 
     .phone-icon-img {
@@ -1003,18 +1001,34 @@
 
     /* Nucleo 2 Pantalla 2 Carga (3.5s) & Carga Completa Styles */
     .n2-loading-layout {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 30px;
+      padding-top: 10px;
+      min-height: 280px;
+      width: 100%;
+    }
+
+    .n2-loading-left-col {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      max-width: 480px;
+    }
+
+    .n2-loading-indicators {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 40px;
-      padding: 30px 0;
-      min-height: 240px;
+      gap: 28px;
+      padding-left: 10px;
     }
 
     .phone-listening-pill {
-      width: 140px;
-      height: 95px;
-      border-radius: 44px;
+      width: 125px;
+      height: 82px;
+      border-radius: 40px;
       background: #00f0ff;
       display: flex;
       align-items: center;
@@ -1031,11 +1045,12 @@
 
     .ring-loader-box {
       position: relative;
-      width: 95px;
-      height: 95px;
+      width: 78px;
+      height: 78px;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
 
     .ring-loader-spinner {
@@ -1043,9 +1058,9 @@
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      border: 3px solid rgba(0, 240, 255, 0.2);
-      border-top: 3px solid #00f0ff;
-      border-right: 3px solid #00f0ff;
+      border: 2.5px solid rgba(0, 240, 255, 0.2);
+      border-top: 2.5px solid #00f0ff;
+      border-right: 2.5px solid #00f0ff;
       box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
       animation: spinRing 1.2s infinite linear;
     }
@@ -1062,20 +1077,97 @@
 
     .ring-loader-text {
       font-family: 'Roboto Mono', monospace;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       font-weight: 700;
       color: #00f0ff;
       letter-spacing: 0.04em;
       text-shadow: 0 0 8px rgba(0, 240, 255, 0.7);
     }
 
+    /* Right Side: Feature Phone Outline Illustration */
+    .n2-phone-illustration-box {
+      position: absolute;
+      right: 24px;
+      top: -15px;
+      width: 175px;
+      height: 285px;
+    }
+
+    .phone-outer-frame {
+      width: 100%;
+      height: 100%;
+      border: 2.5px solid #00f0ff;
+      border-radius: 26px;
+      background: rgba(2, 12, 24, 0.45);
+      box-shadow: 0 0 22px rgba(0, 240, 255, 0.35);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .phone-screen-display {
+      width: 100%;
+      height: 140px;
+      border: 2px solid #00f0ff;
+      border-radius: 12px;
+      background: rgba(2, 12, 24, 0.7);
+      box-shadow: inset 0 0 10px rgba(0, 240, 255, 0.2);
+    }
+
+    .phone-keypad-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      height: 85px;
+    }
+
+    .phone-key-btn {
+      border: 2px solid #00f0ff;
+      border-radius: 10px;
+      background: rgba(2, 12, 24, 0.6);
+      box-shadow: 0 0 6px rgba(0, 240, 255, 0.25);
+    }
+
+    /* CSS Variables for Nucleus 2 Pantalla 2 (Carga Completa) Component Customization */
+    :root {
+      --n2-p2-phone-width: 215px;
+      --n2-p2-phone-height: 335px;
+      --n2-p2-phone-top: -32px;
+      --n2-p2-phone-right: 20px;
+      --n2-p2-screen-height: 170px;
+      --n2-p2-left-col-max-width: 58%;
+      --n2-p2-left-col-gap: 18px;
+      --n2-p2-bubble-top: 130px;
+      --n2-p2-bubble-left: -65px;
+      --n2-p2-bubble-width: 245px;
+      --n2-p2-bubble-font-size: 0.80rem;
+      --n2-p2-play-btn-size: 52px;
+    }
+
     /* Pantalla 2 Estado 2 (Carga Completa) Result Layout */
     .n2-result-layout {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      min-height: 290px;
+      padding-top: 5px;
+    }
+
+    .n2-result-left-col {
+      display: flex;
+      flex-direction: column;
+      gap: var(--n2-p2-left-col-gap);
+      max-width: var(--n2-p2-left-col-max-width);
+    }
+
+    .n2-result-center-group {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 28px;
-      padding: 10px 0 20px 0;
+      gap: 22px;
+      padding-left: 4px;
     }
 
     .n2-sms-arrow-box {
@@ -1085,49 +1177,122 @@
     }
 
     .sms-icon-box {
-      width: 60px;
-      height: 60px;
-      border-radius: 12px;
+      width: 58px;
+      height: 58px;
+      border-radius: 14px;
       border: 2px solid #00f0ff;
-      background: rgba(4, 16, 32, 0.8);
+      background: rgba(4, 16, 32, 0.85);
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+      box-shadow: 0 0 18px rgba(0, 240, 255, 0.45);
     }
 
-    .n2-song-card-box {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 14px;
+    .n2-phone-illustration-box.result-phone {
+      position: absolute;
+      right: var(--n2-p2-phone-right);
+      top: var(--n2-p2-phone-top);
+      width: var(--n2-p2-phone-width);
+      height: var(--n2-p2-phone-height);
     }
 
-    .eminem-album-frame {
-      width: 180px;
-      height: 180px;
-      border: 2px solid #00f0ff;
-      border-radius: 14px;
+    .n2-phone-illustration-box.result-phone .phone-outer-frame {
+      height: 100%;
+      border-radius: 28px;
+      padding: 16px;
+    }
+
+    .n2-phone-illustration-box.result-phone .phone-screen-display.result-screen {
+      height: var(--n2-p2-screen-height);
+    }
+
+    .phone-screen-display.result-screen {
+      position: relative;
       overflow: hidden;
-      box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .eminem-cover-photo {
+    .phone-screen-display.result-screen .eminem-cover-photo {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
+      transition: transform 0.35s ease, filter 0.35s ease;
     }
 
-    .song-details-text {
+    .phone-screen-display.result-screen:hover .eminem-cover-photo {
+      transform: scale(1.06);
+      filter: brightness(0.85);
+    }
+
+    .eminem-hover-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(2, 12, 24, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      z-index: 4;
+    }
+
+    .phone-screen-display.result-screen:hover .eminem-hover-overlay,
+    .phone-screen-display.result-screen.playing-audio .eminem-hover-overlay {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .eminem-play-btn {
+      width: var(--n2-p2-play-btn-size);
+      height: var(--n2-p2-play-btn-size);
+      border-radius: 50%;
+      background: #00f0ff;
+      border: 2px solid #00f0ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 25px #00f0ff, inset 0 0 10px rgba(255, 255, 255, 0.8);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      outline: none;
+    }
+
+    .eminem-play-btn:hover {
+      transform: scale(1.12);
+      box-shadow: 0 0 35px #00f0ff, 0 0 15px #ffffff;
+    }
+
+    /* Speech Bubble / Result Card Pill Overlapping Phone Screen & Keypad on Left */
+    .n2-song-bubble-pill {
+      position: absolute;
+      top: var(--n2-p2-bubble-top);
+      left: var(--n2-p2-bubble-left);
+      width: var(--n2-p2-bubble-width);
+      background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%);
+      border: 1.5px solid rgba(0, 240, 255, 0.7);
+      border-radius: 14px;
+      padding: 9px 12px;
       font-family: 'Roboto Mono', monospace;
+      font-size: var(--n2-p2-bubble-font-size);
+      font-weight: 600;
+      color: #0f172a;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.45), 0 8px 20px rgba(0, 0, 0, 0.5);
+      z-index: 10;
+      line-height: 1.4;
+      pointer-events: none;
     }
 
-    .song-title-line {
-      font-size: 0.95rem;
+    .n2-song-bubble-pill .purple-song-title {
+      color: #6100ff;
       font-weight: 700;
-      color: #00f0ff;
-      margin-bottom: 6px;
     }
 
     .shazam-count-line {
@@ -1474,6 +1639,29 @@
       box-shadow: 0 0 35px rgba(94, 0, 255, 0.8);
     }
 
+    /* CSS Variables for Nucleus 3 Pantalla 5 (Prayer in C) Component Customization */
+    :root {
+      --n3-p5-layout-gap: 48px;
+      --n3-p5-layout-offset-x: 40px;
+      --n3-p5-huella-max-height: 185px;
+      --n3-p5-album-frame-size: 180px;
+      --n3-p5-play-btn-size: 56px;
+      --n3-p5-title-font-size: 0.96rem;
+      --n3-p5-count-font-size: 0.90rem;
+    }
+
+    /* Pantalla 5 — Búsqueda en Base de Datos & Resultado (Prayer in C) */
+    .n3-p5-layout {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--n3-p5-layout-gap);
+      min-height: 320px;
+      padding: 15px 0 25px 0;
+      width: 100%;
+      transform: translateX(var(--n3-p5-layout-offset-x));
+    }
+
     .n3-huellaflecha-frame {
       display: flex;
       align-items: center;
@@ -1483,7 +1671,7 @@
 
     .n3-huellaflecha-img {
       display: block;
-      max-height: 185px;
+      max-height: var(--n3-p5-huella-max-height);
       width: auto;
       object-fit: contain;
       border: none;
@@ -1498,15 +1686,18 @@
       align-items: flex-start;
       gap: 14px;
       flex-shrink: 0;
+      cursor: pointer;
     }
 
     .robin-album-frame {
-      width: 180px;
-      height: 180px;
+      position: relative;
+      width: var(--n3-p5-album-frame-size);
+      height: var(--n3-p5-album-frame-size);
       border: 2px solid #5E00FF;
       border-radius: 14px;
       overflow: hidden;
       box-shadow: 0 0 25px rgba(94, 0, 255, 0.6);
+      cursor: pointer;
     }
 
     .robin-cover-photo {
@@ -1514,6 +1705,54 @@
       height: 100%;
       object-fit: cover;
       display: block;
+      transition: transform 0.35s ease, filter 0.35s ease;
+    }
+
+    .robin-album-frame:hover .robin-cover-photo {
+      transform: scale(1.06);
+      filter: brightness(0.85);
+    }
+
+    .prayer-hover-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(3, 10, 24, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      z-index: 4;
+    }
+
+    .robin-album-frame:hover .prayer-hover-overlay,
+    .n3-song-card-box.playing-audio .prayer-hover-overlay {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .prayer-play-btn {
+      width: var(--n3-p5-play-btn-size);
+      height: var(--n3-p5-play-btn-size);
+      border-radius: 50%;
+      background: #5E00FF;
+      border: 2px solid #5E00FF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 28px #5E00FF, inset 0 0 10px rgba(255, 255, 255, 0.8);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      outline: none;
+    }
+
+    .prayer-play-btn:hover {
+      transform: scale(1.12);
+      box-shadow: 0 0 38px #5E00FF, 0 0 15px #ffffff;
     }
 
     .song-details-text {
@@ -1525,14 +1764,14 @@
 
     .song-title-line {
       color: #8DAFFF !important;
-      font-size: 0.96rem;
+      font-size: var(--n3-p5-title-font-size);
       font-weight: 600;
       line-height: 1.4;
     }
 
     .shazam-count-line {
       color: #8DAFFF !important;
-      font-size: 0.9rem;
+      font-size: var(--n3-p5-count-font-size);
       line-height: 1.4;
       opacity: 0.92;
     }
@@ -1546,6 +1785,61 @@
       padding: 20px 0 15px 0;
       min-height: 380px;
       position: relative;
+    }
+
+    .p6-graph-container {
+      position: relative;
+    }
+
+    /* Pantalla 6 Radar Graph Interactive Node Tooltip */
+    .graph-tooltip {
+      position: absolute;
+      pointer-events: none;
+      z-index: 25;
+      padding: 7px 15px;
+      border-radius: 18px;
+      background: rgba(2, 10, 24, 0.95);
+      backdrop-filter: blur(10px);
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.82rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transform: translate(-50%, -100%) translateY(-10px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+    }
+
+    .graph-tooltip::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+    }
+
+    .graph-tooltip.cyan-theme {
+      border: 1.5px solid #00f0ff;
+      color: #00f0ff;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.45), 0 4px 18px rgba(0, 0, 0, 0.7);
+    }
+    .graph-tooltip.cyan-theme::after {
+      border-top: 6px solid #00f0ff;
+    }
+
+    .graph-tooltip.purple-theme {
+      border: 1.5px solid #818cf8;
+      color: #818cf8;
+      box-shadow: 0 0 20px rgba(129, 140, 248, 0.45), 0 4px 18px rgba(0, 0, 0, 0.7);
+    }
+    .graph-tooltip.purple-theme::after {
+      border-top: 6px solid #818cf8;
+    }
+
+    .graph-visible-dot {
+      transition: r 0.2s ease, fill 0.2s ease;
     }
 
     .p6-legend-box {

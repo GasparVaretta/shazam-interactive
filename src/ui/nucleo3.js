@@ -7,11 +7,12 @@
 import gsap from 'gsap';
 
 export class Nucleo3UI {
-  constructor(onCompleteCallback) {
+  constructor(onCompleteCallback, audioManager = null) {
     this.onCompleteCallback = onCompleteCallback;
+    this.audioManager = audioManager;
     this.container = null;
     this.currentScreen = 1; // 1 to 6
-    this.robinSchulzAlbumDataUrl = null;
+    this.robinSchulzAlbumDataUrl = 'references/nucleo_3/prayer_in_c_cover.jpg';
 
     // Explicit Data Mapping Structure for Pantalla 6 Radar Graph
     this.graphData = {
@@ -34,39 +35,10 @@ export class Nucleo3UI {
   }
 
   /**
-   * Crops Robin Schulz album cover from pantalla5.png via HTML5 Canvas
+   * Returns high-resolution Robin Schulz album cover asset path
    */
   async loadRobinSchulzAlbumPhoto() {
-    if (this.robinSchulzAlbumDataUrl) return this.robinSchulzAlbumDataUrl;
-
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'Anonymous';
-      img.src = 'references/nucleo_3/pantallas/pantalla5.png';
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const scaleX = img.naturalWidth / 1920;
-        const scaleY = img.naturalHeight / 1080;
-
-        // Bounding box for Robin Schulz album cover inside pantalla5.png
-        const cropX = 710 * scaleX;
-        const cropY = 398 * scaleY;
-        const cropW = 280 * scaleX;
-        const cropH = 280 * scaleY;
-
-        canvas.width = cropW;
-        canvas.height = cropH;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
-
-        this.robinSchulzAlbumDataUrl = canvas.toDataURL('image/png');
-        resolve(this.robinSchulzAlbumDataUrl);
-      };
-      img.onerror = () => {
-        console.warn('Could not load pantalla5.png for cropping');
-        resolve('references/nucleo_3/pantallas/pantalla5.png');
-      };
-    });
+    return 'references/nucleo_3/prayer_in_c_cover.jpg';
   }
 
   async render(targetEl) {
@@ -199,10 +171,10 @@ export class Nucleo3UI {
             </div>
           </div>
 
-          <!-- PANTALLA 5: Búsqueda en Base de Datos & Resultado -->
+          <!-- PANTALLA 5: Búsqueda en Base de Datos & Resultado (Prayer in C) -->
           <div id="n3-screen-5" class="n3-screen" style="display: none;">
             <p class="n3-description">
-              Una vez obtenida la huella la aplicación la busca entre millones de canciones, proceso que solo tarda milisegundos.
+              Una vez obtenida la huella la aplicación la busca entre <span class="highlight-purple">millones de canciones</span>, proceso que solo tarda <span class="highlight-purple">milisegundos</span>.
             </p>
 
             <div class="n3-p5-layout">
@@ -211,13 +183,20 @@ export class Nucleo3UI {
                 <img src="references/nucleo_3/assets_mockups/huellaflecha.png" alt="Huella y flecha hacia la canción" class="n3-huellaflecha-img" />
               </div>
 
-              <!-- Right: Robin Schulz Album Cover & Song Details -->
-              <div class="n3-song-card-box">
+              <!-- Right: Robin Schulz Album Cover & Song Details (Prayer in C Interactive Audio) -->
+              <div class="n3-song-card-box" id="prayerScreenContainer">
                 <div class="robin-album-frame">
-                  <img src="${albumSrc}" class="robin-cover-photo" alt="Robin Schulz - Prayer in C" />
+                  <img id="prayerAlbumImg" src="${albumSrc}" class="robin-cover-photo" alt="Robin Schulz - Prayer in C" />
+                  <div class="prayer-hover-overlay">
+                    <button id="prayerPlayBtn" class="prayer-play-btn" title="Reproducir muestra de audio">
+                      <svg id="prayerPlayIcon" width="24" height="24" viewBox="0 0 24 24" fill="#ffffff">
+                        <polygon points="7 4 19 12 7 20 7 4"></polygon>
+                      </svg>
+                    </button>
+                  </div>
                 </div>
                 <div class="song-details-text">
-                  <div class="song-title-line">Tu cancion es: “Prayer in C” de Robin Schulz</div>
+                  <div class="song-title-line">Tu cancion es: <span class="purple-song-title">“Prayer in C”</span> de Robin Schulz</div>
                   <div class="shazam-count-line">20 millones Shazams (2015).</div>
                 </div>
               </div>
@@ -269,32 +248,54 @@ export class Nucleo3UI {
                 <!-- Central Radar Triangle SVG -->
                 <svg class="radar-triangle-svg" viewBox="0 0 360 250">
                   <!-- Outer Base Triangle (Purple Boundary) -->
-                  <polygon points="180,45 65,215 295,215" fill="rgba(94, 0, 255, 0.08)" stroke="#5E00FF" stroke-width="2.5" />
+                  <polygon points="180,45 65,215 295,215" fill="rgba(94, 0, 255, 0.08)" stroke="#5E00FF" stroke-width="2.5" style="pointer-events: none;" />
 
                   <!-- Inner Grid Triangle -->
-                  <polygon points="180,102 122,187 238,187" fill="none" stroke="rgba(94, 0, 255, 0.3)" stroke-dasharray="3,3" stroke-width="1.2" />
+                  <polygon points="180,102 122,187 238,187" fill="none" stroke="rgba(94, 0, 255, 0.3)" stroke-dasharray="3,3" stroke-width="1.2" style="pointer-events: none;" />
 
                   <!-- 3 Center Axis Lines -->
-                  <line x1="180" y1="158" x2="180" y2="45" stroke="rgba(94, 0, 255, 0.4)" stroke-dasharray="3,3" stroke-width="1.5" />
-                  <line x1="180" y1="158" x2="65" y2="215" stroke="rgba(94, 0, 255, 0.4)" stroke-dasharray="3,3" stroke-width="1.5" />
-                  <line x1="180" y1="158" x2="295" y2="215" stroke="rgba(94, 0, 255, 0.4)" stroke-dasharray="3,3" stroke-width="1.5" />
+                  <line x1="180" y1="158" x2="180" y2="45" stroke="rgba(94, 0, 255, 0.4)" stroke-dasharray="3,3" stroke-width="1.5" style="pointer-events: none;" />
+                  <line x1="180" y1="158" x2="65" y2="215" stroke="rgba(94, 0, 255, 0.4)" stroke-dasharray="3,3" stroke-width="1.5" style="pointer-events: none;" />
+                  <line x1="180" y1="158" x2="295" y2="215" stroke="rgba(94, 0, 255, 0.4)" stroke-dasharray="3,3" stroke-width="1.5" style="pointer-events: none;" />
 
-                  <!-- Series 2002 (Cyan Polygon) -->
-                  <polygon points="180,110 82,204 225,180" fill="rgba(0, 240, 255, 0.18)" stroke="#00f0ff" stroke-width="2.5" />
+                  <!-- Series 2002 Polygon (Cyan) -->
+                  <polygon points="180,110 82,204 225,180" fill="rgba(0, 240, 255, 0.18)" stroke="#00f0ff" stroke-width="2.5" style="pointer-events: none;" />
 
-                  <!-- Series 2002 Dots -->
-                  <circle cx="180" cy="110" r="5" fill="#00f0ff" />
-                  <circle cx="82" cy="204" r="5" fill="#00f0ff" />
-                  <circle cx="225" cy="180" r="5" fill="#00f0ff" />
+                  <!-- Series 2026 Polygon (Purple/Periwinkle) -->
+                  <polygon points="180,45 150,172 295,215" fill="rgba(129, 140, 248, 0.18)" stroke="#818cf8" stroke-width="2.5" style="pointer-events: none;" />
 
-                  <!-- Series 2026 (Periwinkle/Violet Polygon) -->
-                  <polygon points="180,45 150,172 295,215" fill="rgba(129, 140, 248, 0.18)" stroke="#818cf8" stroke-width="2.5" />
+                  <!-- Interactive Dots (Rendered ON TOP of all background polygons) -->
+                  <!-- Series 2002 Dots (Cyan) -->
+                  <g class="graph-dot-group" data-val="+20 millones" data-cx="180" data-cy="110" data-theme="cyan">
+                    <circle cx="180" cy="110" r="5" fill="#00f0ff" class="graph-visible-dot" />
+                    <circle cx="180" cy="110" r="18" fill="transparent" class="graph-hit-dot" style="cursor: pointer;" />
+                  </g>
+                  <g class="graph-dot-group" data-val="15-30 segundos" data-cx="82" data-cy="204" data-theme="cyan">
+                    <circle cx="82" cy="204" r="5" fill="#00f0ff" class="graph-visible-dot" />
+                    <circle cx="82" cy="204" r="18" fill="transparent" class="graph-hit-dot" style="cursor: pointer;" />
+                  </g>
+                  <g class="graph-dot-group" data-val="500.000 usuarios" data-cx="225" data-cy="180" data-theme="cyan">
+                    <circle cx="225" cy="180" r="5" fill="#00f0ff" class="graph-visible-dot" />
+                    <circle cx="225" cy="180" r="18" fill="transparent" class="graph-hit-dot" style="cursor: pointer;" />
+                  </g>
 
-                  <!-- Series 2026 Dots -->
-                  <circle cx="180" cy="45" r="6" fill="#818cf8" />
-                  <circle cx="150" cy="172" r="6" fill="#818cf8" />
-                  <circle cx="295" cy="215" r="6" fill="#818cf8" />
+                  <!-- Series 2026 Dots (Purple/Periwinkle) -->
+                  <g class="graph-dot-group" data-val="+100.000 millones" data-cx="180" data-cy="45" data-theme="purple">
+                    <circle cx="180" cy="45" r="6" fill="#818cf8" class="graph-visible-dot" />
+                    <circle cx="180" cy="45" r="18" fill="transparent" class="graph-hit-dot" style="cursor: pointer;" />
+                  </g>
+                  <g class="graph-dot-group" data-val="3-7 segundos" data-cx="150" data-cy="172" data-theme="purple">
+                    <circle cx="150" cy="172" r="6" fill="#818cf8" class="graph-visible-dot" />
+                    <circle cx="150" cy="172" r="18" fill="transparent" class="graph-hit-dot" style="cursor: pointer;" />
+                  </g>
+                  <g class="graph-dot-group" data-val="+300 millones" data-cx="295" data-cy="215" data-theme="purple">
+                    <circle cx="295" cy="215" r="6" fill="#818cf8" class="graph-visible-dot" />
+                    <circle cx="295" cy="215" r="18" fill="transparent" class="graph-hit-dot" style="cursor: pointer;" />
+                  </g>
                 </svg>
+
+                <!-- Interactive Floating Tooltip Pill -->
+                <div id="p6-graph-tooltip" class="graph-tooltip" style="opacity: 0; display: none;"></div>
 
                 <!-- Bottom-Left Axis Data: Tiempo de procesado -->
                 <div class="vertex-block v-left">
@@ -377,15 +378,119 @@ export class Nucleo3UI {
     if (finalNextBtn) {
       finalNextBtn.addEventListener('click', (e) => {
         e.stopPropagation();
+        if (this.audioManager) this.audioManager.cleanupNucleo3Audio();
         if (this.onCompleteCallback) {
           console.log('⚡ Nucleus 3 Complete -> Triggering transition to Node 4');
           this.onCompleteCallback();
         }
       });
     }
+
+    // Prayer in C song playback toggle & hover play icon
+    const prayerScreenContainer = this.container.querySelector('#prayerScreenContainer');
+    const prayerPlayBtn = this.container.querySelector('#prayerPlayBtn');
+    const prayerPlayIcon = this.container.querySelector('#prayerPlayIcon');
+    const prayerAlbumImg = this.container.querySelector('#prayerAlbumImg');
+    const prayerHoverOverlay = this.container.querySelector('.prayer-hover-overlay');
+
+    const handlePrayerPlayToggle = (e) => {
+      e.stopPropagation();
+      console.log('🎵 Prayer in C song component clicked! audioManager:', this.audioManager);
+      if (this.audioManager) {
+        this.audioManager.togglePrayerInCAudio();
+      } else {
+        console.warn('⚠️ audioManager is not set on Nucleo3UI!');
+      }
+    };
+
+    if (prayerScreenContainer) prayerScreenContainer.addEventListener('click', handlePrayerPlayToggle);
+    if (prayerPlayBtn) prayerPlayBtn.addEventListener('click', handlePrayerPlayToggle);
+    if (prayerAlbumImg) prayerAlbumImg.addEventListener('click', handlePrayerPlayToggle);
+    if (prayerHoverOverlay) prayerHoverOverlay.addEventListener('click', handlePrayerPlayToggle);
+
+    // Sync state changes from AudioManager to play button icon & visual playing state
+    if (this.audioManager) {
+      this.audioManager.onPrayerInCStateChange = (isPlaying) => {
+        if (prayerPlayIcon) {
+          if (isPlaying) {
+            prayerPlayIcon.innerHTML = '<rect x="6" y="4" width="4" height="16" fill="#ffffff"/><rect x="14" y="4" width="4" height="16" fill="#ffffff"/>';
+          } else {
+            prayerPlayIcon.innerHTML = '<polygon points="7 4 19 12 7 20 7 4" fill="#ffffff"></polygon>';
+          }
+        }
+        if (prayerScreenContainer) {
+          if (isPlaying) {
+            prayerScreenContainer.classList.add('playing-audio');
+          } else {
+            prayerScreenContainer.classList.remove('playing-audio');
+          }
+        }
+      };
+    }
+
+    // Pantalla 6 Interactive Graph Node Hover Tooltip
+    const tooltip = this.container.querySelector('#p6-graph-tooltip');
+    const dotGroups = this.container.querySelectorAll('.graph-dot-group');
+
+    dotGroups.forEach((dotGroup) => {
+      const showTooltip = (e) => {
+        e.stopPropagation();
+        const val = dotGroup.dataset.val;
+        const cx = parseFloat(dotGroup.dataset.cx);
+        const cy = parseFloat(dotGroup.dataset.cy);
+        const theme = dotGroup.dataset.theme;
+
+        if (tooltip) {
+          tooltip.textContent = val;
+          tooltip.className = `graph-tooltip ${theme}-theme`;
+          tooltip.style.left = `${(cx / 360) * 100}%`;
+          tooltip.style.top = `${(cy / 250) * 100}%`;
+          tooltip.style.display = 'block';
+
+          gsap.killTweensOf(tooltip);
+          gsap.fromTo(
+            tooltip,
+            { opacity: 0, scale: 0.85, y: 5 },
+            { opacity: 1, scale: 1, y: 0, duration: 0.22, ease: 'back.out(1.8)' }
+          );
+        }
+
+        const visibleDot = dotGroup.querySelector('.graph-visible-dot');
+        if (visibleDot) {
+          gsap.to(visibleDot, { r: 9, duration: 0.2, ease: 'power1.out' });
+        }
+      };
+
+      const hideTooltip = (e) => {
+        e.stopPropagation();
+        if (tooltip) {
+          gsap.to(tooltip, {
+            opacity: 0,
+            scale: 0.85,
+            duration: 0.18,
+            ease: 'power1.in',
+            onComplete: () => {
+              tooltip.style.display = 'none';
+            }
+          });
+        }
+
+        const visibleDot = dotGroup.querySelector('.graph-visible-dot');
+        if (visibleDot) {
+          const originalR = dotGroup.dataset.theme === 'purple' ? 6 : 5;
+          gsap.to(visibleDot, { r: originalR, duration: 0.2, ease: 'power1.out' });
+        }
+      };
+
+      dotGroup.addEventListener('mouseenter', showTooltip);
+      dotGroup.addEventListener('mouseleave', hideTooltip);
+    });
   }
 
   goToScreen(screenNum) {
+    if (this.audioManager) {
+      this.audioManager.cleanupNucleo3Audio();
+    }
     this.currentScreen = screenNum;
 
     // Update Header Title depending on Screen
@@ -413,6 +518,9 @@ export class Nucleo3UI {
   }
 
   resetState() {
+    if (this.audioManager) {
+      this.audioManager.cleanupNucleo3Audio();
+    }
     this.goToScreen(1);
   }
 }

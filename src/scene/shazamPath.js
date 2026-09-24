@@ -63,7 +63,9 @@ export function getTangentAtT(t) {
 export function getCanonicalNodes() {
   const scale = CONFIG.sceneScale || 1.0;
   return CONFIG.nodes.map((nodeDef) => {
-    const rawPos = getPointAtT(nodeDef.pathT);
+    const rawPos = nodeDef.overridePos
+      ? nodeDef.overridePos.clone()
+      : getPointAtT(nodeDef.pathT);
     const scaledPos = rawPos.clone().multiplyScalar(scale);
     return {
       ...nodeDef,
