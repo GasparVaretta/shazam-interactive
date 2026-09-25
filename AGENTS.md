@@ -1281,4 +1281,4 @@ The OVERVIEW screen operates under 5 strict visual states governing the General 
 
 ## 5. ESTADO 5 — REGRESO A OVERVIEW
 - Returning to OVERVIEW restores the General Overview Title (`#overviewUI` visible).
-- Individual nuclei titles reset to HIDDEN initially until the cursor hovers over an unlocked node again.
+- Individual nuclei titles reset to HIDDEN initially until the cursor hovers over an unlocked node again.

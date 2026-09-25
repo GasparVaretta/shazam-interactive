@@ -312,7 +312,7 @@
       cursor: not-allowed;
       opacity: 0.5;
       transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-      pointer-events: none;
+      pointer-events: auto;
     }
 
     /* Unlocked Cyan Active State for Conclusion CTA */
@@ -1521,6 +1521,152 @@
       filter: drop-shadow(0 0 26px rgba(94, 0, 255, 0.45));
     }
 
+    /* Pantalla 2 — Wrapper y Popover Tooltip del Espectrograma Real */
+    .n3-espectrograma-wrapper {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: default;
+    }
+
+    /* Hotspot transparente centrado exclusivamente sobre la gráfica del espectrograma */
+    .n3-espectrograma-hotspot {
+      position: absolute;
+      left: 28%;
+      right: 0;
+      top: 36px;
+      bottom: 90px;
+      background: transparent;
+      cursor: pointer;
+      z-index: 10;
+      overflow: hidden;
+    }
+
+    /* Línea de escaneo animada — simula lectura del espectrograma */
+    .n3-scan-line {
+      position: absolute;
+      top: -5px;
+      left: 0;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(to bottom, transparent 0%, #b545ff 20%, #7b00ff 50%, #b545ff 80%, transparent 100%);
+      pointer-events: none;
+      z-index: 11;
+      animation: scanSweep 3.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    }
+
+    @keyframes scanSweep {
+      0% {
+        left: 0%;
+        opacity: 0.2;
+      }
+
+      5% {
+        opacity: 1;
+      }
+
+      95% {
+        opacity: 1;
+      }
+
+      100% {
+        left: calc(100% - 2px);
+        opacity: 0.2;
+      }
+    }
+
+    /* Cartel indicador de interacción — píldora blanca flotante */
+    .n3-espectrograma-hint {
+      position: absolute;
+      right: 8px;
+      bottom: 92px;
+      background: #ffffff;
+      color: #1a0050;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 5px 11px;
+      border-radius: 20px;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 15;
+      box-shadow: 0 2px 12px rgba(94, 0, 255, 0.25);
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+      /* Animación sutil de pulsación para llamar atención */
+      animation: hintPulse 2.2s ease-in-out infinite;
+    }
+
+    @keyframes hintPulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      50% {
+        opacity: 0.7;
+        transform: translateY(-2px);
+      }
+    }
+
+    .n3-espectrograma-hint.dismissed {
+      opacity: 0;
+      visibility: hidden;
+      animation: none;
+    }
+
+    .n3-espectrograma-img {
+      transition: filter 0.3s ease;
+    }
+
+    .n3-espectrograma-wrapper:has(.n3-espectrograma-hotspot:hover) .n3-espectrograma-img {
+      filter: drop-shadow(0 0 34px rgba(94, 0, 255, 0.75));
+    }
+
+    .n3-espectrograma-popover {
+      position: absolute;
+      top: 15%;
+      left: 65%;
+      transform: translate(-50%, -100%) scale(0.95);
+      width: clamp(240px, 20vw, 340px);
+      max-width: 22vw;
+      max-height: 22vh;
+      border: 1.5px solid #5E00FF;
+      border-radius: 12px;
+      background: rgba(3, 10, 24, 0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.75), 0 0 24px rgba(94, 0, 255, 0.5), inset 0 0 12px rgba(94, 0, 255, 0.2);
+      padding: 6px;
+      pointer-events: none;
+      z-index: 120;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s ease;
+      overflow: hidden;
+    }
+
+    .n3-espectrograma-hotspot:hover~.n3-espectrograma-popover,
+    .n3-espectrograma-popover.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, -100%) scale(1);
+    }
+
+    .n3-popover-real-img {
+      width: 100%;
+      height: auto;
+      max-height: calc(22vh - 12px);
+      display: block;
+      border-radius: 8px;
+      object-fit: contain;
+    }
+
     /* Pantalla 5 — Búsqueda en Base de Datos & Resultado */
     .n3-p5-layout {
       display: flex;
@@ -2043,6 +2189,293 @@
       border-color: rgba(94, 0, 255, 0.4) !important;
       box-shadow: none !important;
     }
+
+    /* Nucleo 4 Full Component Image & Interactive Overlay Styles */
+    .nucleo4-card {
+      left: -380px !important;
+      top: -270px;
+      width: 880px;
+      min-height: 560px;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+    }
+
+    .n4-component-container {
+      position: relative;
+      width: 100%;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .n4-component-img {
+      position: relative !important;
+      z-index: 1 !important;
+      width: 100%;
+      height: auto;
+      display: block;
+      pointer-events: none !important;
+      user-select: none;
+      -webkit-user-drag: none;
+      -webkit-user-select: none;
+      border-radius: 16px;
+      filter: drop-shadow(0 0 25px rgba(94, 0, 255, 0.45));
+    }
+
+    /* Base Music Overlay Style */
+    .n4-music-overlay {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 20;
+      border: none;
+      background: transparent;
+      border-radius: 8px;
+      pointer-events: auto;
+      padding: 0;
+      outline: none;
+    }
+
+    /* Individual Song Overlay Positions (1:1 aligned over album covers in PNG) */
+    .n4-music-eminem-p1 {
+      left: 10.16%;
+      top: 59.65%;
+      width: 6.5%;
+      height: 10.0%;
+    }
+
+    .n4-music-tiktok-p1 {
+      left: 62.5%;
+      top: 29.65%;
+      width: 6.5%;
+      height: 10.0%;
+    }
+
+    .n4-music-eminem-p2 {
+      left: 10.18%;
+      top: 59.13%;
+      width: 6.5%;
+      height: 10.0%;
+    }
+
+    .n4-music-tiktok-p2 {
+      left: 30.8%;
+      top: 59.16%;
+      width: 6.5%;
+      height: 10.0%;
+    }
+
+    .n4-music-gotye-p2 {
+      left: 49.5%;
+      top: 39.58%;
+      width: 6.5%;
+      height: 10.0%;
+    }
+
+    .n4-music-prayer-p2 {
+      left: 67.9%;
+      top: 15.8%;
+      width: 6.5%;
+      height: 10.0%;
+    }
+
+    /* Play Icon Circle */
+    .n4-play-btn-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(94, 0, 255, 0.85);
+      border: 2px solid #a855f7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 16px #5E00FF, inset 0 0 8px rgba(255, 255, 255, 0.7);
+      opacity: 0.7;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .n4-music-overlay:hover .n4-play-btn-circle,
+    .n4-music-overlay.playing-audio .n4-play-btn-circle {
+      opacity: 1;
+      transform: scale(1.15);
+      background: #a855f7;
+      border-color: #ffffff;
+      box-shadow: 0 0 25px #a855f7, 0 0 10px #ffffff;
+    }
+
+    .n4-music-overlay.playing-audio {
+      box-shadow: 0 0 18px rgba(168, 85, 247, 0.85);
+    }
+
+    /* Visible Buttons for Nucleo 4 (Pantalla 1 & Pantalla 2) */
+    .n4-btn-overlay {
+      position: absolute !important;
+      cursor: pointer !important;
+      z-index: 50 !important;
+      pointer-events: auto !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 8px !important;
+      padding: 8px 20px !important;
+      border-radius: 9999px !important;
+      font-family: 'Roboto Mono', 'SF Pro Display', monospace, sans-serif !important;
+      font-size: 0.85rem !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.08em !important;
+      color: #ffffff !important;
+      background: rgba(8, 20, 36, 0.94) !important;
+      backdrop-filter: blur(8px) !important;
+      -webkit-backdrop-filter: blur(8px) !important;
+      border: 2px solid #5E00FF !important;
+      box-shadow: 0 0 18px rgba(94, 0, 255, 0.4), inset 0 0 8px rgba(94, 0, 255, 0.2) !important;
+      outline: none !important;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      text-transform: uppercase !important;
+      box-sizing: border-box !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+
+    .n4-btn-overlay:hover {
+      background: rgba(94, 0, 255, 0.3) !important;
+      border-color: #ffffff !important;
+      box-shadow: 0 0 28px rgba(168, 85, 247, 0.85), inset 0 0 12px rgba(168, 85, 247, 0.3) !important;
+      transform: scale(1.05);
+    }
+
+    .n4-btn-overlay:active {
+      transform: scale(0.98);
+    }
+
+    .n4-btn-avanzar-p1 {
+      left: 78.07%;
+      top: 83.78%;
+      min-width: 130px;
+      height: 38px;
+    }
+
+    .n4-btn-volver-p2 {
+      left: 8.5%;
+      top: 80.5%;
+      min-width: 120px;
+      height: 38px;
+    }
+
+    .n4-btn-conclusion-p2 {
+      left: 73.62%;
+      top: 80.5%;
+      min-width: 155px;
+      height: 38px;
+    }
+
+    /* Conclusion UI Component Styles */
+    .conclusion-component-container {
+      position: relative !important;
+      width: 100%;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .conclusion-component-img {
+      position: relative !important;
+      z-index: 1 !important;
+      width: 100%;
+      height: auto;
+      display: block;
+      pointer-events: none !important;
+      user-select: none;
+      -webkit-user-drag: none;
+      -webkit-user-select: none;
+      border-radius: 16px;
+      filter: drop-shadow(0 0 25px rgba(94, 0, 255, 0.45));
+    }
+
+    /* Unified Neon Action Buttons for Conclusion Screens (Pantalla 1 & Pantalla 2) */
+    .conclusion-nav-btn {
+      position: absolute !important;
+      z-index: 60 !important;
+      pointer-events: auto !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 8px !important;
+      padding: 10px 22px !important;
+      height: 42px !important;
+      box-sizing: border-box !important;
+      border-radius: 9999px !important;
+      font-family: 'Roboto Mono', 'SF Pro Display', monospace, sans-serif !important;
+      font-size: 0.85rem !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.08em !important;
+      color: #ffffff !important;
+      background: rgba(8, 16, 32, 0.94) !important;
+      backdrop-filter: blur(8px) !important;
+      -webkit-backdrop-filter: blur(8px) !important;
+      cursor: pointer !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      text-transform: uppercase !important;
+      outline: none !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+
+    /* Pantalla 1: Siguiente (Abajo a la derecha) */
+    .conclusion-btn-siguiente {
+      bottom: 26px !important;
+      right: 32px !important;
+      border: 1.5px solid rgba(0, 240, 255, 0.85) !important;
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.45), inset 0 0 8px rgba(0, 240, 255, 0.2) !important;
+    }
+
+    .conclusion-btn-siguiente:hover {
+      background: rgba(0, 240, 255, 0.2) !important;
+      border-color: #00f0ff !important;
+      box-shadow: 0 0 24px rgba(0, 240, 255, 0.75), inset 0 0 12px rgba(0, 240, 255, 0.3) !important;
+      transform: translateY(-2px);
+    }
+
+    /* Pantalla 2: Volver (Abajo a la izquierda) */
+    .conclusion-btn-volver {
+      bottom: 26px !important;
+      left: 32px !important;
+      border: 1.5px solid rgba(168, 85, 247, 0.85) !important;
+      box-shadow: 0 0 16px rgba(168, 85, 247, 0.45), inset 0 0 8px rgba(168, 85, 247, 0.2) !important;
+    }
+
+    .conclusion-btn-volver:hover {
+      background: rgba(168, 85, 247, 0.2) !important;
+      border-color: #c084fc !important;
+      box-shadow: 0 0 24px rgba(168, 85, 247, 0.75), inset 0 0 12px rgba(168, 85, 247, 0.3) !important;
+      transform: translateY(-2px);
+    }
+
+    /* Pantalla 2: Finalizar (Abajo a la derecha) */
+    .conclusion-btn-finalizar {
+      bottom: 26px !important;
+      right: 32px !important;
+      border: 1.5px solid rgba(0, 240, 255, 0.85) !important;
+      background: linear-gradient(135deg, rgba(8, 16, 32, 0.95), rgba(94, 0, 255, 0.45)) !important;
+      box-shadow: 0 0 18px rgba(0, 240, 255, 0.5), inset 0 0 10px rgba(0, 240, 255, 0.2) !important;
+    }
+
+    .conclusion-btn-finalizar:hover {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.25), rgba(168, 85, 247, 0.45)) !important;
+      border-color: #00f0ff !important;
+      box-shadow: 0 0 26px rgba(0, 240, 255, 0.8), inset 0 0 14px rgba(0, 240, 255, 0.35) !important;
+      transform: translateY(-2px);
+    }
+
+    .conclusion-nav-btn:active {
+      transform: translateY(1px) scale(0.98);
+    }
   </style>
 </head>
 
@@ -2127,7 +2560,7 @@
     <div id="anchors-layer"></div>
 
     <!-- 3. Conclusion Right-Side Circular CTA (#conclusionCTA) -->
-    <div id="conclusionCTA" class="disabled" title="Conclusión (Bloqueado hasta completar recorrido)">
+    <div id="conclusionCTA" class="disabled" title="CONCLUSIÓN">
       <div class="cta-inner-dot"></div>
     </div>
 

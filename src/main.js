@@ -188,7 +188,8 @@ class ShazamApp {
       () => {
         console.log('⚡ Nucleus 4 -> Navigating back to Nucleus 3');
         this.handleNodeSelection(2);
-      }
+      },
+      this.audioManager
     );
     const node4ContentEl = document.getElementById('node-content-3');
     if (node4ContentEl) {
@@ -229,23 +230,32 @@ class ShazamApp {
   }
 
   /**
-   * Conclusion CTA & Translucent Panel UI Handlers
+   * Conclusion CTA & Overview Handlers
    */
   setupConclusionUI() {
     if (this.conclusionCTA) {
+      this.conclusionCTA.setAttribute('title', 'CONCLUSIÓN');
       this.conclusionCTA.addEventListener('click', () => {
-        if (this.isConclusionUnlocked && this.conclusionPanel) {
-          console.log('Opening Conclusion Panel');
-          this.conclusionPanel.classList.add('active');
+        if (this.isConclusionUnlocked) {
+          console.log('⚡ Opening Conclusion from Overview CTA');
+          this.showConclusion();
         }
       });
     }
+  }
 
-    if (this.panelCloseBtn && this.conclusionPanel) {
-      this.panelCloseBtn.addEventListener('click', () => {
-        console.log('Closing Conclusion Panel');
-        this.conclusionPanel.classList.remove('active');
-      });
+  /**
+   * Unlocks the conclusion right-side CTA persistent state
+   */
+  unlockConclusion() {
+    if (!this.isConclusionUnlocked) {
+      this.isConclusionUnlocked = true;
+      console.log('🎉 CONCLUSION UNLOCKED! Enabling Cyan Conclusion CTA');
+    }
+    if (this.conclusionCTA) {
+      this.conclusionCTA.classList.remove('disabled');
+      this.conclusionCTA.classList.add('unlocked');
+      this.conclusionCTA.setAttribute('title', 'CONCLUSIÓN');
     }
   }
 
@@ -254,17 +264,19 @@ class ShazamApp {
    * Resets camera to overview so the 3D scene is visible behind the modal.
    */
   showConclusion() {
+    // Persistent unlock when reaching conclusion
+    this.unlockConclusion();
+
     // Return 3D camera to overview so zoom is cancelled
     this.cameraSystem.transitionToOverview();
     this.resetActiveSelection();
 
-    // Re-create Nucleo5 overlay with finalization and dynamic title callbacks
+    // Re-create Nucleo5 overlay with single source of truth component
     if (this.nucleo5UI) {
       this.nucleo5UI.destroy();
     }
     this.nucleo5UI = new Nucleo5UI(
-      () => this.handleFinalize(),
-      () => this.getNucleus1Title()
+      () => this.handleFinalize()
     );
     this.nucleo5UI.show();
   }
@@ -326,6 +338,7 @@ class ShazamApp {
     if (this.audioManager) {
       this.audioManager.cleanupNucleo2Audio();
       this.audioManager.cleanupNucleo3Audio();
+      this.audioManager.cleanupNucleo4Audio();
     }
     if (this.interactionManager) {
       this.interactionManager.setSelectedNodeIndex(-1);
@@ -351,14 +364,7 @@ class ShazamApp {
       this.visitedNodes.has(3);
 
     if (hasCompletedFullSequence && !this.isConclusionUnlocked) {
-      this.isConclusionUnlocked = true;
-      console.log('🎉 CONCLUSION UNLOCKED! Enabling Cyan Conclusion CTA');
-
-      if (this.conclusionCTA) {
-        this.conclusionCTA.classList.remove('disabled');
-        this.conclusionCTA.classList.add('unlocked');
-        this.conclusionCTA.title = 'Abrir Conclusión del Estudio';
-      }
+      this.unlockConclusion();
     }
   }
 
